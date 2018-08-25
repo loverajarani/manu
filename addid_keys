@@ -22,3 +22,18 @@ ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAIEAywWhrwq4FjHt+UuwZcZePxtjtZOENFpOjufycaYso2nT
 goto github-->settings--->ssh---->add new key---->id_rsa.pub
 
 $git push git@<git-hub url>
+
+
+
+
+
+admin1@admin:~/manu/.git$ cat config
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = git+ssh://github.com:loverajarani/yes.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+admin1@admin:~/manu/.git$ 
