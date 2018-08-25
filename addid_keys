@@ -1,0 +1,24 @@
+if you want to push/pull any repository from local to remote(git hub)
+first checkout 
+
+$ git push https://<git-hub url>
+working fine with username and passwd credential
+
+$ git push git@<git-hub url>
+fail
+Could not read remote repository. Please make sure you have the correct access rights and the repository exists.
+this means you need to add **id_rsa.pub** to **authorized_keys**
+goto 
+$ cd /home/admin/.ssh
+$ls
+$vi authorized_keys
+add id_rsa keys(n no of keys you can add)
+ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAIEA0KJDLOiiXj9XdMxiCT9KvaKfuxFQi+CIiklaN5hHsNgYOu7TijqyONEu5fONLoAo/cshLa+KuargyTrtizwcP4TPcTXZhhJrM0GUDJragw7SMVIs/5xJBGAyHKJ1YUMGO7+nJTmsCLx6PFOlQYveuriiVVCCZerGCLH+UtSXK3z+l7hx9NiDg3/ylOLc3f3SLxrJKn0gMTgK7BHJFXo4PguuPjWZLVdUDX+XKiqtT2n4IsYs6N9qVFG3zUgNlEjZM47NK/ytAC0max98pK+QNzsuaQOo/IShJ1TOw5wwScflPArVJ2AyROqAe7cfQg7q12I9olASFd3U5NazfZCTYAvWA1kz9UZEWLJ1Br1XOkPqOleMM8KCp/PXzz8H0kISkMIji0/QuiZOPEBsKlszXjlALcXR8Mg1uiZVWy48i9JheyXyj1ToCj6cPScpgFHp3DAGSlKKbE1EFaVfeeyGAnHESlnDDg3Gq5xSsB9Okqm3V5t8GpFaJbV68BxQ4BK6HJ21A3CinV4LdV3hR/OBUbDG2EcI+ZKRDjlpJuu4YU= stace@pretend-machine
+ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAIEAywWhrwq4FjHt+UuwZcZePxtjtZOENFpOjufycaYso2nTlzNwnAQEQRfbqsUxKVtOtGxgApIkUvjRIjNBdJE6iOzvBXZhhJrM0GUDJragw7SMVIs/5xJBGAyHKJ1YUMGO7+nJTmsCLx6PFOlQYveuriiVVCCZerGCLH+UtSXK3z+l7hx9NiDg3/ylOLc3f3SLxrJKn0gMTgK7BHJFXo4PguuPjWZLVdUDX+XKiqtT2n4IsYs6N9qVFG3zUgNlEjZM47NK/ytAC0max98pK+QNzsuaQOo/IShJ1TOw5wwScflPArVJ2AyROqAe7cfQg7q12I9olASFd3U5NazfZCTYAvWA1kz9UZEWLJ1Br1XOkPqOleMM8KCp/PXzz8H0kISkMIji0/QuiZOPEBsKlszXjlALcXR8Mg1uiZVWy48i9JheyXyj1ToCj6cPScpgFHp3DAGSlKKbE1EFaVfeeyGAnHESuXC9wkSeFZCEyMJ+RgJxMkBXNZmyycbwsSqAeGJpMEUDlwzu2GD0obBz0HXqg9J1Xallop5AVDKfeszZcc= stace@another-machine
+
+:wq!
+
+
+goto github-->settings--->ssh---->add new key---->id_rsa.pub
+
+$git push git@<git-hub url>
