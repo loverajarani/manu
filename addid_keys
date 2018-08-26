@@ -37,3 +37,4 @@ admin1@admin:~/manu/.git$ cat config
 	url = git+ssh://github.com:loverajarani/yes.git
 	fetch = +refs/heads/*:refs/remotes/origin/*
 admin1@admin:~/manu/.git$ 
+$ git pull --allow-unrelated-histories git@github.com:loverajarani/git.git
