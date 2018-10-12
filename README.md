@@ -11,4 +11,7 @@ CREATING VPC IN AWS
 192.168.0.0/24------------	65,536----------------256 SUBNETS------------PUBLIC
 192.168.1.0/32------------	65,536------------------1 SUBNET------------PRIVATE
 
-
+  TO UNINSTALL A PROGRAM IN WINDOWS 3RD PARTY TOOLS
+  https://windowsreport.com/windows-7-uninstaller-software/
+  https://windowsreport.com/windows-uninstaller-not-working/
+  
