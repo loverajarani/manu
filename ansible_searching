@@ -1,0 +1,68 @@
+https://docs.ansible.com/ansible/devel/user_guide/playbooks_delegation.html
+https://stackoverflow.com/questions/26597926/install-mysql-with-ansible-on-ubuntu----------mysql server
+
+**************************************************************************
+root@master:/etc/ansible/playbooks# cat gitinstall.yaml
+---
+- hosts: agent
+  sudo: yes
+
+  tasks:
+
+  - name: install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+            - git
+************************************************************************************            
+root@master:/etc/ansible/playbooks# cat multipkg.yaml
+---
+- hosts: agent
+  sudo: yes
+
+  tasks:
+
+  - name: install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+            - mysql-server
+            - python-mysqldb
+  - name: starts packages
+    service: name=mysql state=started enabled=yes
+
+root@master:/etc/ansible/playbooks#
+************************************************************************************
+service mysql status-----------check in agent
+******************************************************
+root@master:/etc/ansible/playbooks# cat multipkg.yaml
+---
+- hosts: agent
+  sudo: yes
+
+  tasks:
+
+  - name: install packages
+    apt: name={{ item }} state=removed
+    with_items:
+            - mysql-server
+            - python-mysqldb
+***************************************************************************************removing packages
+---
+- hosts: dba
+  #sudo: yes
+  tasks:
+    - name: remove apache2
+      apt: name=apache2 state=removed
+*********************************************************************************************************
+---
+- hosts: dba
+  tasks:
+    - name: run echo command
+      command: /bin/echo hello raja
+***************************************************************************************************************
+---
+- hosts: dba
+  # sudo: yes
+  tasks:
+    - name: install apache2
+      apt: name=apache2 update_cache=yes state=latest
+***************************************************************************************************
