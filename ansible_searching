@@ -66,3 +66,81 @@ root@master:/etc/ansible/playbooks# cat multipkg.yaml
     - name: install apache2
       apt: name=apache2 update_cache=yes state=latest
 ***************************************************************************************************
+root@master:/etc/ansible/playbooks# vi book1.yml
+root@master:/etc/ansible/playbooks# ansible-playbook book1.yml
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [checking os versions] **********************************************************************************
+changed: [agent]
+
+TASK [debug] *************************************************************************************************
+ok: [agent] => {
+    "msg": {
+        "changed": true,
+        "failed": false,
+        "rc": 0,
+        "stderr": "Shared connection to agent closed.\r\n",
+        "stderr_lines": [
+            "Shared connection to agent closed."
+        ],
+        "stdout": "Ubuntu 18.04.1 LTS \\n \\l\r\n\r\n",
+        "stdout_lines": [
+            "Ubuntu 18.04.1 LTS \\n \\l",
+            ""
+        ]
+    }
+}
+
+TASK [install or remove packages] ****************************************************************************
+[DEPRECATION WARNING]: State 'removed' is deprecated. Using state 'absent' instead.. This feature will be
+removed in version 2.9. Deprecation warnings can be disabled by setting deprecation_warnings=False in
+ansible.cfg.
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=4    changed=2    unreachable=0    failed=0
+root@master:/etc/ansible/playbooks# ansible-playbook book2.yml
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [checking os versions] **********************************************************************************
+changed: [agent]
+
+TASK [debug] *************************************************************************************************
+ok: [agent] => {
+    "msg": {
+        "changed": true,
+        "failed": false,
+        "rc": 0,
+        "stderr": "Shared connection to agent closed.\r\n",
+        "stderr_lines": [
+            "Shared connection to agent closed."
+        ],
+        "stdout": "Ubuntu 18.04.1 LTS \\n \\l\r\n\r\n",
+        "stdout_lines": [
+            "Ubuntu 18.04.1 LTS \\n \\l",
+            ""
+        ]
+    }
+}
+
+TASK [install or remove packages] ****************************************************************************
+changed: [agent]
+
+TASK [install or remove packages] ****************************************************************************
+skipping: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=4    changed=2    unreachable=0    failed=0
+
+root@master:/etc/ansible/playbooks#
+
+
+
