@@ -1,0 +1,72 @@
+root@master:/etc/ansible# ls
+ansible.cfg  hosts  playbooks  roles
+root@master:/etc/ansible# cd roles
+root@master:/etc/ansible/roles# ls
+root@master:/etc/ansible/roles# ansible-galaxy init webapp
+- webapp was created successfully
+root@master:/etc/ansible/roles# ls
+webapp
+root@master:/etc/ansible/roles# ls webapp/
+README.md  defaults  files  handlers  meta  tasks  templates  tests  vars
+root@master:/etc/ansible/roles# cd tasks
+-bash: cd: tasks: No such file or directory
+root@master:/etc/ansible/roles# cd webapp/t
+tasks/     templates/ tests/
+root@master:/etc/ansible/roles# cd webapp/t
+tasks/     templates/ tests/
+root@master:/etc/ansible/roles# cd webapp/tasks/
+root@master:/etc/ansible/roles/webapp/tasks# ls
+main.yml
+root@master:/etc/ansible/roles/webapp/tasks# cat main.yml
+---
+# tasks file for webapproot@master:/etc/ansible/roles/webapp/tasks# vi main.yml
+root@master:/etc/ansible/roles/webapp/tasks# cd ..
+root@master:/etc/ansible/roles/webapp# cd ..
+root@master:/etc/ansible/roles# cd ..
+root@master:/etc/ansible# cd playbooks/
+root@master:/etc/ansible/playbooks# ls
+abc.txt      book1.yml  book3.retry  demo.yaml        gitrepo.retry  hosts         sample.yml
+book1.retry  book2.yml  book3.yml    gitinstall.yaml  gitrepo.yml    sample.retry
+root@master:/etc/ansible/playbooks# vi webrole.yml
+root@master:/etc/ansible/playbooks# ansible-playbook webrole.yml
+ERROR! A malformed role declaration was encountered.
+
+The error appears to have been in '/etc/ansible/playbooks/webrole.yml': line 2, column 3, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+---
+- hosts: agent
+  ^ here
+
+root@master:/etc/ansible/playbooks# vi webrole.yml
+root@master:/etc/ansible/playbooks# ansible-playbook webrole.yml
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [webapp : install git] **********************************************************************************
+[DEPRECATION WARNING]: State 'removed' is deprecated. Using state 'absent' instead.. This feature will be
+removed in version 2.9. Deprecation warnings can be disabled by setting deprecation_warnings=False in
+ansible.cfg.
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=0
+
+root@master:/etc/ansible/playbooks# cat webrole.yml
+---
+- hosts: agent
+  roles:
+    - webapp
+
+root@master:/etc/ansible/playbooks# cd /etc/ansible/roles/webapp/tasks/
+root@master:/etc/ansible/roles/webapp/tasks# cat main.yml
+---
+  - name: install git
+    action: apt name=git state=removed
+# tasks file for webapp
+root@master:/etc/ansible/roles/webapp/tasks#
