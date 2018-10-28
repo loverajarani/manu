@@ -245,9 +245,98 @@ root@master:/etc/ansible/playbooks# cat book3.yml
   - name: finding the directory of /root/hello
     stat:
      path: /root/hello
+     
     register: dir
   - debug: msg="{{dir}}"
 root@master:/etc/ansible/playbooks#
+
+
+root@master:/etc/ansible/playbooks# ansible-playbook book3.yml
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [finding the directory of /root/hello] ******************************************************************
+ok: [agent]
+
+TASK [debug] *************************************************************************************************
+ok: [agent] => {
+    "msg": {
+        "changed": false,
+        "failed": false,
+        "stat": {
+            "atime": 1540705178.244499,
+            "attr_flags": "e",
+            "attributes": [
+                "extents"
+            ],
+            "block_size": 4096,
+            "blocks": 8,
+            "charset": "binary",
+            "ctime": 1540705178.244499,
+            "dev": 51713,
+            "device_type": 0,
+            "executable": true,
+            "exists": true,
+            "gid": 0,
+            "gr_name": "root",
+            "inode": 256217,
+            "isblk": false,
+            "ischr": false,
+            "isdir": true,
+            "isfifo": false,
+            "isgid": false,
+            "islnk": false,
+            "isreg": false,
+            "issock": false,
+            "isuid": false,
+            "mimetype": "inode/directory",
+            "mode": "0755",
+            "mtime": 1540705178.244499,
+            "nlink": 2,
+            "path": "/root/hello",
+            "pw_name": "root",
+            "readable": true,
+            "rgrp": true,
+            "roth": true,
+            "rusr": true,
+            "size": 4096,
+            "uid": 0,
+            "version": "1705902572",
+            "wgrp": false,
+            "woth": false,
+            "writeable": true,
+            "wusr": true,
+            "xgrp": true,
+            "xoth": true,
+            "xusr": true
+        }
+    }
+}
+
+TASK [create file in /root/hello] ****************************************************************************
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=4    changed=1    unreachable=0    failed=0
+
+root@master:/etc/ansible/playbooks# cat book3.yml
+---
+- hosts: agent
+  tasks:
+  - name: finding the directory of /root/hello
+    stat:
+     path: /root/hello
+    register: dir
+  - debug: msg="{{dir}}"
+  - name: create file in /root/hello
+    file: path=/root/hello state=touch
+    when: dir.stat.exists==true
+
+root@master:/etc/ansible/playbooks#
+
 
 
 
