@@ -1,0 +1,450 @@
+https://docs.ansible.com/ansible/devel/user_guide/playbooks_delegation.html
+https://stackoverflow.com/questions/26597926/install-mysql-with-ansible-on-ubuntu----------mysql server
+https://ansible-tips-and-tricks.readthedocs.io/en/latest/ansible/commands/
+
+**************************************************************************
+ansible dba -m setup -a "filter=ansible_distribution*"             __________os information
+
+*****************************************************************************
+root@master:/etc/ansible/playbooks# cat gitinstall.yaml
+---
+- hosts: agent
+  sudo: yes
+
+  tasks:
+
+  - name: install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+            - git
+************************************************************************************            
+root@master:/etc/ansible/playbooks# cat multipkg.yaml
+---
+- hosts: agent
+  sudo: yes
+
+  tasks:
+
+  - name: install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+            - mysql-server
+            - python-mysqldb
+  - name: starts packages
+    service: name=mysql state=started enabled=yes
+
+root@master:/etc/ansible/playbooks#
+************************************************************************************
+service mysql status-----------check in agent
+******************************************************
+root@master:/etc/ansible/playbooks# cat multipkg.yaml
+---
+- hosts: agent
+  sudo: yes
+
+  tasks:
+
+  - name: install packages
+    apt: name={{ item }} state=removed
+    with_items:
+            - mysql-server
+            - python-mysqldb
+***************************************************************************************removing packages
+---
+- hosts: dba
+  #sudo: yes
+  tasks:
+    - name: remove apache2
+      apt: name=apache2 state=removed
+*********************************************************************************************************
+---
+- hosts: dba
+  tasks:
+    - name: run echo command
+      command: /bin/echo hello raja
+***************************************************************************************************************
+---
+- hosts: dba
+  # sudo: yes
+  tasks:
+    - name: install apache2
+      apt: name=apache2 update_cache=yes state=latest
+***************************************************************************************************
+ansible raja -m setup | less
+ansible dba -m setup | less
+root@master:/etc/ansible/playbooks# ansible dba -m setup -a "filter=ansible_distribution*"
+agent | SUCCESS => {
+    "ansible_facts": {
+        "ansible_distribution": "Ubuntu",
+        "ansible_distribution_file_parsed": true,
+        "ansible_distribution_file_path": "/etc/os-release",
+        "ansible_distribution_file_variety": "Debian",
+        "ansible_distribution_major_version": "18",
+        "ansible_distribution_release": "bionic",
+        "ansible_distribution_version": "18.04"
+    },
+    "changed": false
+}
+root@master:/etc/ansible/playbooks#
+
+root@master:/etc/ansible/playbooks# ansible dba -m authorized_key -a "user=root key='ssh-rsa AAAA...XXX == ubuntu@agent'"
+agent | CHANGED => {
+    "changed": true,
+    "comment": null,
+    "exclusive": false,
+    "follow": false,
+    "key": "ssh-rsa AAAA...XXX == ubuntu@agent",
+    "key_options": null,
+    "keyfile": "/root/.ssh/authorized_keys",
+    "manage_dir": true,
+    "path": null,
+    "state": "present",
+    "unique": false,
+    "user": "root",
+    "validate_certs": true
+}
+
+root@master:/etc/ansible/playbooks# ansible all -m lineinfile -a "dest=/etc/group regexp='^(users:x:100:)(.*)' line='\1ldapusername,\2' state=present backrefs=yes"
+master | CHANGED => {
+    "backup": "",
+    "changed": true,
+    "msg": "line replaced"
+}
+agent | CHANGED => {
+    "backup": "",
+    "changed": true,
+    "msg": "line replaced"
+}
+root@master:/etc/ansible/playbooks#
+
+root@master:/etc/ansible/playbooks# ansible dba -m lineinfile -a "dest=/etc/group regexp='^(users:x:100:)(.*)' line='\1ldapusername,\2' state=present backrefs=yes"
+agent | CHANGED => {
+    "backup": "",
+    "changed": true,
+    "msg": "line replaced"
+}
+
+
+root@master:/etc/ansible/playbooks#
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --user root--------------------to specify the user
+
+root@master:/etc/ansible# ansible -m ping dba --private-key=~/.ssh/id_rsa -u root
+agent | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml -e "ATMOUSERNAME=atmouser"
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [run echo command] **************************************************************************************
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=0
+
+root@master:/etc/ansible# cat sample.yml
+cat: sample.yml: No such file or directory
+root@master:/etc/ansible# cat playbooks/sample.yml
+---
+- hosts: dba
+  tasks:
+          - name: run echo command
+            command: /bin/echo hello raja
+root@master:/etc/ansible#
+#################################################################################################################################################
+****************************************************wrong below are groups not host users*************************
+root@master:/etc/ansible# ls
+ansible.cfg  hosts  playbooks  roles
+root@master:/etc/ansible# vi host1
+root@master:/etc/ansible# cat host1
+agent
+root@master:/etc/ansible# ansible-playbook playbooks/PLAYBOOK_NAME.yml --limit "host1"
+ERROR! the playbook: playbooks/PLAYBOOK_NAME.yml could not be found
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit "host1"
+ [WARNING]: Could not match supplied host pattern, ignoring: host1
+
+ERROR! Specified hosts and/or --limit does not match any hosts
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit "dba"
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [run echo command] **************************************************************************************
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=0
+
+root@master:/etc/ansible#
+
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit "dba,raja"
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [run echo command] **************************************************************************************
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=0
+
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit 'all:!raja'
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [run echo command] **************************************************************************************
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=0
+
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit 'all:!dba'
+
+PLAY [dba] ***************************************************************************************************
+skipping: no hosts matched
+
+PLAY RECAP ***************************************************************************************************
+*******************************************************************************************************************************************
+#####################################################################################################################
+
+
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit 'all:!master'      ___________to check with host1
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [run echo command] **************************************************************************************
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=0
+
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit 'all:!agent'   ------------------to check host2
+
+PLAY [dba] ***************************************************************************************************
+skipping: no hosts matched
+
+PLAY RECAP ***************************************************************************************************
+
+root@master:/etc/ansible#
+
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --tags 'install'        ______________Limit to all tags matching install
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=1    changed=0    unreachable=0    failed=0
+
+root@master:/etc/ansible# ansible-playbook playbooks/gitinstall.yaml --tags 'install' ---------------------Limit to all tags matching install
+[DEPRECATION WARNING]: Instead of sudo/sudo_user, use become/become_user and make sure become_method is
+'sudo' (default). This feature will be removed in version 2.9. Deprecation warnings can be disabled by
+setting deprecation_warnings=False in ansible.cfg.
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=1    changed=0    unreachable=0    failed=0
+
+root@master:/etc/ansible#
+
+
+root@master:/etc/ansible# ansible-playbook playbooks/gitinstall.yaml --skip-tags 'sudoers' ___________________Skip any tag matching sudoers
+
+[DEPRECATION WARNING]: Instead of sudo/sudo_user, use become/become_user and make sure become_method is
+'sudo' (default). This feature will be removed in version 2.9. Deprecation warnings can be disabled by
+setting deprecation_warnings=False in ansible.cfg.
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [install packages] **************************************************************************************
+[DEPRECATION WARNING]: Invoking "apt" only once while using a loop via squash_actions is deprecated. Instead
+of using a loop to supply multiple items and specifying `name: {{ item }}`, please use `name: [u'git']` and
+remove the loop. This feature will be removed in version 2.11. Deprecation warnings can be disabled by
+setting deprecation_warnings=False in ansible.cfg.
+ok: [agent] => (item=[u'git'])
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=0    unreachable=0    failed=0
+
+root@master:/etc/ansible#
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+# Troubleshooting Ansible
+
+root@master:/etc/ansible/playbooks# vi checkmode.yaml
+root@master:/etc/ansible/playbooks# ansible-playbook checkmode.yaml --flush-cache
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [this task will make changes to the system even in check mode] ******************************************
+fatal: [agent]: FAILED! => {"changed": false, "cmd": "/something/to/run --even-in-check-mode", "msg": "[Errno 2] No such file or directory", "rc": 2}
+        to retry, use: --limit @/etc/ansible/playbooks/checkmode.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=1    changed=0    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks# vi checkmode.yaml
+root@master:/etc/ansible/playbooks# ansible-playbook checkmode.yaml --flush-cache
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [this task will make changes to the system even in check mode] ******************************************
+fatal: [agent]: FAILED! => {"changed": true, "cmd": ["ifconfig", "--even-in-check-mode"], "delta": "0:00:00.004491", "end": "2018-10-28 05:26:24.595709", "msg": "non-zero return code", "rc": 1, "start": "2018-10-28 05:26:24.591218", "stderr": "ifconfig: option `--even-in-check-mode' not recognised.\nifconfig: `--help' gives usage information.", "stderr_lines": ["ifconfig: option `--even-in-check-mode' not recognised.", "ifconfig: `--help' gives usage information."], "stdout": "", "stdout_lines": []}
+        to retry, use: --limit @/etc/ansible/playbooks/checkmode.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=1    changed=0    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks# vi checkmode.yaml
+root@master:/etc/ansible/playbooks# ansible-playbook checkmode.yaml --flush-cache
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [this task will make changes to the system even in check mode] ******************************************
+changed: [agent]
+
+TASK [this task will always run under checkmode and not change the system] ***********************************
+fatal: [agent]: FAILED! => {"changed": false, "msg": "Destination /path/to/myconfig.conf does not exist !", "rc": 257}
+        to retry, use: --limit @/etc/ansible/playbooks/checkmode.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks# ansible-playbook checkmode.yaml --syntax-check   ----------------------------Check for bad syntax
+
+playbook: checkmode.yaml
+root@master:/etc/ansible/playbooks#
+
+root@master:/etc/ansible/playbooks# ansible-playbook checkmode.yaml --check     __________________________Running a playbook in dry-run mode
+
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [this task will make changes to the system even in check mode] ******************************************
+changed: [agent]
+
+TASK [this task will always run under checkmode and not change the system] ***********************************
+fatal: [agent]: FAILED! => {"changed": false, "msg": "Destination /path/to/myconfig.conf does not exist !", "rc": 257}
+        to retry, use: --limit @/etc/ansible/playbooks/checkmode.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks#
+
+root@master:/etc/ansible# cd playbooks/
+root@master:/etc/ansible/playbooks# touch abc.txt
+root@master:/etc/ansible/playbooks# vi diff.yml
+root@master:/etc/ansible/playbooks# ansible-playbook  diff.yml
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [this task will not report a diff when the file changes] ************************************************
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=0
+
+root@master:/etc/ansible/playbooks# cat diff.yml
+---
+- hosts: dba
+  tasks:
+   - name: this task will not report a diff when the file changes
+     template:
+      src: /etc/ansible/playbooks/abc.txt
+      dest: /root/abc.txt
+      owner: root
+      group: root
+      mode: '0600'
+     diff: no
+root@master:/etc/ansible/playbooks#
+
+root@master:/etc/ansible/playbooks# cat checkmode.yaml
+---
+- hosts: agent
+  tasks:
+   - name: this task will make changes to the system even in check mode
+     command: ifconfig
+     check_mode: no
+
+   - name: this task will always run under checkmode and not change the system
+     lineinfile:
+        line: "important config"
+        dest: /path/to/myconfig.conf
+        state: present
+     check_mode: yes
+root@master:/etc/ansible/playbooks# cat import.yml
+---
+- hosts: agent
+  sudo: yes
+
+  tasks:
+  - include_tasks: gitinstall.yaml
+root@master:/etc/ansible/playbooks# cat m1.yaml
+---
+- hosts: agent
+  tasks:
+  - name: remove git
+     apt: name=git state=remove
+  action: apt name=apache2 state=installed
+ service: name=Apache state=start
+root@master:/etc/ansible/playbooks
+root@master:/etc/ansible/playbooks# cat git.yaml
+---
+- hosts: agent
+  tasks:
+
+   - name: this task will be skipped in check mode
+     git:
+      repo: ssh:git@github.com:loverajarani/rajarani.git
+      dest: /root/hello
+     when: not ansible_check_mode
+
+   - name: this task will ignore errors in check mode
+     git:
+      repo: ssh://git@github.com:loverajarani/rajarani.git
+      dest: /root/hello
+     ignore_errors: "{{ ansible_check_mode }}"
+root@master:/etc/ansible/playbooks#
+
+
