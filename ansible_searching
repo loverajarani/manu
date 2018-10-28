@@ -337,6 +337,38 @@ root@master:/etc/ansible/playbooks# cat book3.yml
 
 root@master:/etc/ansible/playbooks#
 
+root@master:/etc/ansible/playbooks# cat book3.yml
+---
+- hosts: agent
+  tasks:
+  - name: finding the directory of /root/hello
+    stat:
+     path: /root/hello
+    register: dir
+  - debug: msg="{{dir}}"
+  - name: create file in /root/hello
+    file: path=/root/hello state=touch
+    when: dir.stat.exists==true
+
+root@master:/etc/ansible/playbooks# cat gitrepo.yml
+---
+- hosts: agent
+  tasks:
+
+  - name: install git
+    action: apt name=git state=installed
+
+  - name: create a directoryin /tmp
+    file: path=/tmp/git state=directory
+
+  - name: getting webhooks
+    git:
+     repo: 'https://github.com'
+     dest: /etc/ansible/playbooks /tmp
+     register: mygit
+
+  - debug: msg="{{mygit.stdout}}"
+root@master:/etc/ansible/playbooks#
 
 
 
