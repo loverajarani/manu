@@ -933,3 +933,290 @@ Network error: Software caused connection abort
 ~
 ~
 -- INSERT --                                                                                10,22         All
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=4    changed=2    unreachable=0    failed=0
+
+root@master:/etc/ansible/playbooks# cat book1..Y
+cat: book1..Y: No such file or directory
+root@master:/etc/ansible/playbooks# cat book1.yml
+---
+- hosts: agent
+  tasks:
+  - name: checking os versions
+    raw: cat /etc/issue
+    register: os_version
+  - debug: msg="{{os_version}}"
+  - name: install or remove packages
+    apt: pkg=git state=removed
+    when: ansible_os_family=="Debian"
+root@master:/etc/ansible/playbooks# cat book2.yml
+---
+- hosts: agent
+  tasks:
+  - name: checking os versions
+    raw: cat /etc/issue
+    register: os_version
+  - debug: msg="{{os_version}}"
+  - name: install or remove packages
+    apt: pkg=git state=present
+    when: ansible_os_family=="Debian"
+  - name: install or remove packages
+    yum: pkg=git state=installed
+    when: ansible_os_family=="RedHat"
+root@master:/etc/ansible/playbooks# clear
+root@master:/etc/ansible/playbooks# vi book3.yml
+root@master:/etc/ansible/playbooks# ansible-playbook book3.yml
+ERROR! Syntax Error while loading YAML.
+  did not find expected key
+
+The error appears to have been in '/etc/ansible/playbooks/book3.yml': line 8, column 5, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+    register: dir
+    - debug: msg="{{dir}}"
+    ^ here
+We could be wrong, but this one looks like it might be an issue with
+missing quotes.  Always quote template expression brackets when they
+start a value. For instance:
+
+    with_items:
+      - {{ foo }}
+
+Should be written as:
+
+    with_items:
+      - "{{ foo }}"
+
+root@master:/etc/ansible/playbooks# vi book3.yml
+root@master:/etc/ansible/playbooks# ansible-playbook book3.yml
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [finding the directory of /root/hello] ******************************************************************
+ok: [agent]
+
+TASK [debug] *************************************************************************************************
+ok: [agent] => {
+    "msg": {
+        "changed": false,
+        "failed": false,
+        "stat": {
+            "atime": 1540705178.244499,
+            "attr_flags": "e",
+            "attributes": [
+                "extents"
+            ],
+            "block_size": 4096,
+            "blocks": 8,
+            "charset": "binary",
+            "ctime": 1540705178.244499,
+            "dev": 51713,
+            "device_type": 0,
+            "executable": true,
+            "exists": true,
+            "gid": 0,
+            "gr_name": "root",
+            "inode": 256217,
+            "isblk": false,
+            "ischr": false,
+            "isdir": true,
+            "isfifo": false,
+            "isgid": false,
+            "islnk": false,
+            "isreg": false,
+            "issock": false,
+            "isuid": false,
+            "mimetype": "inode/directory",
+            "mode": "0755",
+            "mtime": 1540705178.244499,
+            "nlink": 2,
+            "path": "/root/hello",
+            "pw_name": "root",
+            "readable": true,
+            "rgrp": true,
+            "roth": true,
+            "rusr": true,
+            "size": 4096,
+            "uid": 0,
+            "version": "1705902572",
+            "wgrp": false,
+            "woth": false,
+            "writeable": true,
+            "wusr": true,
+            "xgrp": true,
+            "xoth": true,
+            "xusr": true
+        }
+    }
+}
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=3    changed=0    unreachable=0    failed=0
+
+root@master:/etc/ansible/playbooks# cat book3.yml
+---
+- hosts: agent
+  tasks:
+  - name: finding the directory of /root/hello
+    stat:
+     path: /root/hello
+    register: dir
+  - debug: msg="{{dir}}"
+root@master:/etc/ansible/playbooks# vi book3.yml
+root@master:/etc/ansible/playbooks# ansible-playbook book3.yml
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [create file in /root/hello] ****************************************************************************
+fatal: [agent]: FAILED! => {"msg": "The conditional check 'dir.stat.exit==true' failed. The error was: error while evaluating conditional (dir.stat.exit==true): 'dir' is undefined\n\nThe error appears to have been in '/etc/ansible/playbooks/book3.yml': line 5, column 5, but may\nbe elsewhere in the file depending on the exact syntax problem.\n\nThe offending line appears to be:\n\n\n  - name: create file in /root/hello\n    ^ here\n"}
+        to retry, use: --limit @/etc/ansible/playbooks/book3.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=1    changed=0    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks# ansible-playbook book3.yml --syntax-check
+
+playbook: book3.yml
+root@master:/etc/ansible/playbooks# vi book3.yml
+root@master:/etc/ansible/playbooks# ansible-playbook book3.yml
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [create file in /root/hello] ****************************************************************************
+fatal: [agent]: FAILED! => {"msg": "The conditional check 'dir.stat.exists==true' failed. The error was: error while evaluating conditional (dir.stat.exists==true): 'dir' is undefined\n\nThe error appears to have been in '/etc/ansible/playbooks/book3.yml': line 5, column 5, but may\nbe elsewhere in the file depending on the exact syntax problem.\n\nThe offending line appears to be:\n\n\n  - name: create file in /root/hello\n    ^ here\n"}
+        to retry, use: --limit @/etc/ansible/playbooks/book3.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=1    changed=0    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks# vi book3.yml
+root@master:/etc/ansible/playbooks# ansible-playbook book3.yml
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [finding the directory of /root/hello] ******************************************************************
+ok: [agent]
+
+TASK [debug] *************************************************************************************************
+ok: [agent] => {
+    "msg": {
+        "changed": false,
+        "failed": false,
+        "stat": {
+            "atime": 1540705178.244499,
+            "attr_flags": "e",
+            "attributes": [
+                "extents"
+            ],
+            "block_size": 4096,
+            "blocks": 8,
+            "charset": "binary",
+            "ctime": 1540705178.244499,
+            "dev": 51713,
+            "device_type": 0,
+            "executable": true,
+            "exists": true,
+            "gid": 0,
+            "gr_name": "root",
+            "inode": 256217,
+            "isblk": false,
+            "ischr": false,
+            "isdir": true,
+            "isfifo": false,
+            "isgid": false,
+            "islnk": false,
+            "isreg": false,
+            "issock": false,
+            "isuid": false,
+            "mimetype": "inode/directory",
+            "mode": "0755",
+            "mtime": 1540705178.244499,
+            "nlink": 2,
+            "path": "/root/hello",
+            "pw_name": "root",
+            "readable": true,
+            "rgrp": true,
+            "roth": true,
+            "rusr": true,
+            "size": 4096,
+            "uid": 0,
+            "version": "1705902572",
+            "wgrp": false,
+            "woth": false,
+            "writeable": true,
+            "wusr": true,
+            "xgrp": true,
+            "xoth": true,
+            "xusr": true
+        }
+    }
+}
+
+TASK [create file in /root/hello] ****************************************************************************
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=4    changed=1    unreachable=0    failed=0
+
+root@master:/etc/ansible/playbooks# cat book3.yml
+---
+- hosts: agent
+  tasks:
+  - name: finding the directory of /root/hello
+    stat:
+     path: /root/hello
+    register: dir
+  - debug: msg="{{dir}}"
+  - name: create file in /root/hello
+    file: path=/root/hello state=touch
+    when: dir.stat.exists==true
+
+root@master:/etc/ansible/playbooks# vi gitrepo.yml
+
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+"gitrepo.yml" [New File]                                                                    0,0-1         All
+
