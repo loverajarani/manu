@@ -794,3 +794,142 @@ Session stopped
     - Press S to save terminal output to file
 
 Network error: Software caused connection abort
+
+ service: name=Apache state=start
+root@master:/etc/ansible/playbooks# cat git.yaml
+---
+- hosts: agent
+  tasks:
+
+   - name: this task will be skipped in check mode
+     git:
+      repo: ssh:git@github.com:loverajarani/rajarani.git
+      dest: /root/hello
+     when: not ansible_check_mode
+
+   - name: this task will ignore errors in check mode
+     git:
+      repo: ssh://git@github.com:loverajarani/rajarani.git
+      dest: /root/hello
+     ignore_errors: "{{ ansible_check_mode }}"
+root@master:/etc/ansible/playbooks# ls
+abc.txt          checkmode.yaml  git.yaml         hosts         import.yml  m1.yaml       sample.yml
+checkmode.retry  git.retry       gitinstall.yaml  import.retry  m1.retry    sample.retry
+root@master:/etc/ansible/playbooks# rm -rf git.yaml
+root@master:/etc/ansible/playbooks# rm -rf git.retry
+root@master:/etc/ansible/playbooks# rm -rf m1.yaml
+root@master:/etc/ansible/playbooks# rm -rf m1.retry
+root@master:/etc/ansible/playbooks# rm -rf checkmode.yaml
+root@master:/etc/ansible/playbooks# rm -rf checkmode.retry
+root@master:/etc/ansible/playbooks# rm -rf import.yml
+root@master:/etc/ansible/playbooks# rm -rf import.retry
+root@master:/etc/ansible/playbooks# ls
+abc.txt  gitinstall.yaml  hosts  sample.retry  sample.yml
+root@master:/etc/ansible/playbooks# clear
+root@master:/etc/ansible/playbooks# vi demo.yaml
+root@master:/etc/ansible/playbooks# ansible-playbook demo.yaml
+ERROR! Syntax Error while loading YAML.
+  could not find expected ':'
+
+The error appears to have been in '/etc/ansible/playbooks/demo.yaml': line 4, column 3, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+  user:root
+  var:
+  ^ here
+
+root@master:/etc/ansible/playbooks# vi demo.yaml
+root@master:/etc/ansible/playbooks#
+root@master:/etc/ansible/playbooks# ansible-playbook demo.yaml
+ERROR! Syntax Error while loading YAML.
+  could not find expected ':'
+
+The error appears to have been in '/etc/ansible/playbooks/demo.yaml': line 4, column 3, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+  user:root
+  var:
+  ^ here
+
+root@master:/etc/ansible/playbooks# vi demo.yaml
+root@master:/etc/ansible/playbooks# ansible-playbook demo.yaml
+ERROR! 'var' is not a valid attribute for a Play
+
+The error appears to have been in '/etc/ansible/playbooks/demo.yaml': line 2, column 3, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+---
+- hosts: dba
+  ^ here
+
+root@master:/etc/ansible/playbooks#
+root@master:/etc/ansible/playbooks# vi demo.yaml
+root@master:/etc/ansible/playbooks# ansible-playbook demo.yaml
+ERROR! 'var' is not a valid attribute for a Play
+
+The error appears to have been in '/etc/ansible/playbooks/demo.yaml': line 2, column 3, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+---
+- hosts: dba
+  ^ here
+
+root@master:/etc/ansible/playbooks# vi demo.yaml
+root@master:/etc/ansible/playbooks# tree roles
+
+Command 'tree' not found, but can be installed with:
+
+snap install tree  # version 3.5, or
+apt  install tree
+
+See 'snap info tree' for additional versions.
+
+root@master:/etc/ansible/playbooks# ls
+abc.txt  demo.yaml  gitinstall.yaml  hosts  sample.retry  sample.yml
+root@master:/etc/ansible/playbooks# cd ..
+root@master:/etc/ansible# ls
+ansible.cfg  hosts  playbooks  roles
+root@master:/etc/ansible# cd roles
+root@master:/etc/ansible/roles# ls
+root@master:/etc/ansible/roles# cd ..
+root@master:/etc/ansible# vi book1.yml
+---
+- hosts: all
+  tasks:
+          - name: check os versions of all environments
+            raw: cat /etc/issue
+  register: os_version
+  - debug: msg="{{os_version}}"
+  - name: install packages or remove package
+    apt: pkg=git state=remove
+    when: ansible-os-
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+~
+Session stopped
+    - Press <return> to exit tab
+    - Press R to restart session
+    - Press S to save terminal output to file
+~
+Network error: Software caused connection abort
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+-- INSERT --                                                                                10,22         All
