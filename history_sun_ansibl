@@ -1220,3 +1220,295 @@ root@master:/etc/ansible/playbooks# vi gitrepo.yml
 ~
 "gitrepo.yml" [New File]                                                                    0,0-1         All
 
+Authenticating with public key "imported-openssh-key"
+     ┌────────────────────────────────────────────────────────────────────┐
+     │                        • MobaXterm 10.8 •                          │
+     │            (SSH client, X-server and networking tools)             │
+     │                                                                    │
+     │ ➤ SSH session to ubuntu@18.208.218.248                             │
+     │   • SSH compression : ✔                                            │
+     │   • SSH-browser     : ✔                                            │
+     │   • X11-forwarding  : ✔  (remote display is forwarded through SSH) │
+     │   • DISPLAY         : ✔  (automatically set on remote server)      │
+     │                                                                    │
+     │ ➤ For more info, ctrl+click on help or visit our website           │
+     └────────────────────────────────────────────────────────────────────┘
+
+Welcome to Ubuntu 18.04.1 LTS (GNU/Linux 4.15.0-1023-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Sun Oct 28 06:58:43 UTC 2018
+
+  System load:  0.0               Processes:           107
+  Usage of /:   21.9% of 7.69GB   Users logged in:     1
+  Memory usage: 20%               IP address for eth0: 172.31.28.0
+  Swap usage:   0%
+
+ * Security certifications for Ubuntu!
+   We now have FIPS, STIG, CC and a CIS Benchmark.
+
+   - http://bit.ly/Security_Certification
+
+ * Want to make a highly secure kiosk, smart display or touchscreen?
+   Here's a step-by-step tutorial for a rainy weekend, or a startup.
+
+   - https://bit.ly/secure-kiosk
+
+
+  Get cloud support with Ubuntu Advantage Cloud Guest:
+    http://www.ubuntu.com/business/services/cloud
+
+ * Canonical Livepatch is available for installation.
+   - Reduce system reboots and improve kernel security. Activate at:
+     https://ubuntu.com/livepatch
+
+57 packages can be updated.
+0 updates are security updates.
+
+
+Last login: Sun Oct 28 06:24:02 2018 from 124.123.87.175
+ubuntu@master:~$ sudo -i
+root@master:~# cd /etc/ansible/playbooks/
+root@master:/etc/ansible/playbooks# ls
+abc.txt      book1.yml  book3.retry  demo.yaml        hosts         sample.yml
+book1.retry  book2.yml  book3.yml    gitinstall.yaml  sample.retry
+root@master:/etc/ansible/playbooks# vi gitrepo.yml
+root@master:/etc/ansible/playbooks# ansible-playbook gitrepo.yml
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [getting webhooks] **************************************************************************************
+fatal: [agent]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (git) module: register Supported parameters include: accept_hostkey, archive, bare, clone, depth, dest, executable, force, key_file, recursive, reference, refspec, remote, repo, separate_git_dir, ssh_opts, track_submodules, umask, update, verify_commit, version"}
+        to retry, use: --limit @/etc/ansible/playbooks/gitrepo.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=1    changed=0    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks# vi gitrepo.yml
+root@master:/etc/ansible/playbooks# ansible-playbook gitrepo.yml
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [create a directoryin /tmp] *****************************************************************************
+changed: [agent]
+
+TASK [getting webhooks] **************************************************************************************
+fatal: [agent]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (git) module: register Supported parameters include: accept_hostkey, archive, bare, clone, depth, dest, executable, force, key_file, recursive, reference, refspec, remote, repo, separate_git_dir, ssh_opts, track_submodules, umask, update, verify_commit, version"}
+        to retry, use: --limit @/etc/ansible/playbooks/gitrepo.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks# vi gitrepo.yml
+root@master:/etc/ansible/playbooks# ansible-playbook gitrepo.yml
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [install git] *******************************************************************************************
+[DEPRECATION WARNING]: State 'installed' is deprecated. Using state 'present' instead.. This feature will be
+removed in version 2.9. Deprecation warnings can be disabled by setting deprecation_warnings=False in
+ansible.cfg.
+ok: [agent]
+
+TASK [create a directoryin /tmp] *****************************************************************************
+ok: [agent]
+
+TASK [getting webhooks] **************************************************************************************
+fatal: [agent]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (git) module: register Supported parameters include: accept_hostkey, archive, bare, clone, depth, dest, executable, force, key_file, recursive, reference, refspec, remote, repo, separate_git_dir, ssh_opts, track_submodules, umask, update, verify_commit, version"}
+        to retry, use: --limit @/etc/ansible/playbooks/gitrepo.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=3    changed=0    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks# vi gitrepo.yml
+root@master:/etc/ansible/playbooks# ansible-playbook gitrepo.yml
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [install git] *******************************************************************************************
+[DEPRECATION WARNING]: State 'installed' is deprecated. Using state 'present' instead.. This feature will be
+removed in version 2.9. Deprecation warnings can be disabled by setting deprecation_warnings=False in
+ansible.cfg.
+ok: [agent]
+
+TASK [create a directoryin /tmp] *****************************************************************************
+ok: [agent]
+
+TASK [getting webhooks] **************************************************************************************
+fatal: [agent]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (git) module: register Supported parameters include: accept_hostkey, archive, bare, clone, depth, dest, executable, force, key_file, recursive, reference, refspec, remote, repo, separate_git_dir, ssh_opts, track_submodules, umask, update, verify_commit, version"}
+        to retry, use: --limit @/etc/ansible/playbooks/gitrepo.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=3    changed=0    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks# vi gitrepo.yml
+root@master:/etc/ansible/playbooks# ansible-playbook gitrepo.yml
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [install git] *******************************************************************************************
+[DEPRECATION WARNING]: State 'installed' is deprecated. Using state 'present' instead.. This feature will be
+removed in version 2.9. Deprecation warnings can be disabled by setting deprecation_warnings=False in
+ansible.cfg.
+ok: [agent]
+
+TASK [create a directoryin /tmp] *****************************************************************************
+ok: [agent]
+
+TASK [getting webhooks] **************************************************************************************
+fatal: [agent]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (git) module: register Supported parameters include: accept_hostkey, archive, bare, clone, depth, dest, executable, force, key_file, recursive, reference, refspec, remote, repo, separate_git_dir, ssh_opts, track_submodules, umask, update, verify_commit, version"}
+        to retry, use: --limit @/etc/ansible/playbooks/gitrepo.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=3    changed=0    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks# vi gitrepo.yml
+root@master:/etc/ansible/playbooks# ansible-playbook gitrepo.yml
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [install git] *******************************************************************************************
+[DEPRECATION WARNING]: State 'installed' is deprecated. Using state 'present' instead.. This feature will be
+removed in version 2.9. Deprecation warnings can be disabled by setting deprecation_warnings=False in
+ansible.cfg.
+ok: [agent]
+
+TASK [create a directoryin /tmp] *****************************************************************************
+ok: [agent]
+
+TASK [getting webhooks] **************************************************************************************
+fatal: [agent]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (git) module: register Supported parameters include: accept_hostkey, archive, bare, clone, depth, dest, executable, force, key_file, recursive, reference, refspec, remote, repo, separate_git_dir, ssh_opts, track_submodules, umask, update, verify_commit, version"}
+        to retry, use: --limit @/etc/ansible/playbooks/gitrepo.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=3    changed=0    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks#
+root@master:/etc/ansible/playbooks# ls
+abc.txt      book1.yml  book3.retry  demo.yaml        gitrepo.retry  hosts         sample.yml
+book1.retry  book2.yml  book3.yml    gitinstall.yaml  gitrepo.yml    sample.retry
+root@master:/etc/ansible/playbooks# cat book3.yml
+---
+- hosts: agent
+  tasks:
+  - name: finding the directory of /root/hello
+    stat:
+     path: /root/hello
+    register: dir
+  - debug: msg="{{dir}}"
+  - name: create file in /root/hello
+    file: path=/root/hello state=touch
+    when: dir.stat.exists==true
+
+root@master:/etc/ansible/playbooks# cat gitrepo.yml
+---
+- hosts: agent
+  tasks:
+
+  - name: install git
+    action: apt name=git state=installed
+
+  - name: create a directoryin /tmp
+    file: path=/tmp/git state=directory
+
+  - name: getting webhooks
+    git:
+     repo: 'https://github.com'
+     dest: /etc/ansible/playbooks /tmp
+     register: mygit
+
+  - debug: msg="{{mygit.stdout}}"
+root@master:/etc/ansible/playbooks# cd ..
+root@master:/etc/ansible# ls
+ansible.cfg  hosts  playbooks  roles
+root@master:/etc/ansible# cd roles
+root@master:/etc/ansible/roles# ls
+root@master:/etc/ansible/roles# ansible-galaxy init webapp
+- webapp was created successfully
+root@master:/etc/ansible/roles# ls
+webapp
+root@master:/etc/ansible/roles# ls webapp/
+README.md  defaults  files  handlers  meta  tasks  templates  tests  vars
+root@master:/etc/ansible/roles# cd tasks
+-bash: cd: tasks: No such file or directory
+root@master:/etc/ansible/roles# cd webapp/t
+tasks/     templates/ tests/
+root@master:/etc/ansible/roles# cd webapp/t
+tasks/     templates/ tests/
+root@master:/etc/ansible/roles# cd webapp/tasks/
+root@master:/etc/ansible/roles/webapp/tasks# ls
+main.yml
+root@master:/etc/ansible/roles/webapp/tasks# cat main.yml
+---
+# tasks file for webapproot@master:/etc/ansible/roles/webapp/tasks# vi main.yml
+root@master:/etc/ansible/roles/webapp/tasks# cd ..
+root@master:/etc/ansible/roles/webapp# cd ..
+root@master:/etc/ansible/roles# cd ..
+root@master:/etc/ansible# cd playbooks/
+root@master:/etc/ansible/playbooks# ls
+abc.txt      book1.yml  book3.retry  demo.yaml        gitrepo.retry  hosts         sample.yml
+book1.retry  book2.yml  book3.yml    gitinstall.yaml  gitrepo.yml    sample.retry
+root@master:/etc/ansible/playbooks# vi webrole.yml
+root@master:/etc/ansible/playbooks# ansible-playbook webrole.yml
+ERROR! A malformed role declaration was encountered.
+
+The error appears to have been in '/etc/ansible/playbooks/webrole.yml': line 2, column 3, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+---
+- hosts: agent
+  ^ here
+
+root@master:/etc/ansible/playbooks# vi webrole.yml
+root@master:/etc/ansible/playbooks# ansible-playbook webrole.yml
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [webapp : install git] **********************************************************************************
+[DEPRECATION WARNING]: State 'removed' is deprecated. Using state 'absent' instead.. This feature will be
+removed in version 2.9. Deprecation warnings can be disabled by setting deprecation_warnings=False in
+ansible.cfg.
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=0
+
+root@master:/etc/ansible/playbooks# cat webrole.yml
+---
+- hosts: agent
+  roles:
+    - webapp
+
+root@master:/etc/ansible/playbooks# cd /etc/ansible/roles/webapp/tasks/
+root@master:/etc/ansible/roles/webapp/tasks# cat main.yml
+---
+  - name: install git
+    action: apt name=git state=removed
+# tasks file for webapp
+root@master:/etc/ansible/roles/webapp/tasks#
