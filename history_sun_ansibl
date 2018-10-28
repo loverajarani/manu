@@ -1,0 +1,796 @@
+root@master:~# cd /etc/ansible/playbooks/
+root@master:/etc/ansible/playbooks# clear
+root@master:/etc/ansible/playbooks# ansible dba -m setup | less
+root@master:/etc/ansible/playbooks# vi hosts
+root@master:/etc/ansible/playbooks# ansible raja -m setup | less
+root@master:/etc/ansible/playbooks# cd ..
+root@master:/etc/ansible# vi hosts
+root@master:/etc/ansible# cd playbooks/
+root@master:/etc/ansible/playbooks# ansible raja -m setup | less
+root@master:/etc/ansible/playbooks# ^C
+root@master:/etc/ansible/playbooks# ansible dba -m setup -a "filter=ansible_distribution*"
+agent | SUCCESS => {
+    "ansible_facts": {
+        "ansible_distribution": "Ubuntu",
+        "ansible_distribution_file_parsed": true,
+        "ansible_distribution_file_path": "/etc/os-release",
+        "ansible_distribution_file_variety": "Debian",
+        "ansible_distribution_major_version": "18",
+        "ansible_distribution_release": "bionic",
+        "ansible_distribution_version": "18.04"
+    },
+    "changed": false
+}
+root@master:/etc/ansible/playbooks# ssh root@agent
+Welcome to Ubuntu 18.04.1 LTS (GNU/Linux 4.15.0-1023-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Sun Oct 28 04:45:39 UTC 2018
+
+  System load:  0.0               Processes:           89
+  Usage of /:   24.8% of 7.69GB   Users logged in:     0
+  Memory usage: 30%               IP address for eth0: 172.31.20.30
+  Swap usage:   0%
+
+ * Security certifications for Ubuntu!
+   We now have FIPS, STIG, CC and a CIS Benchmark.
+
+   - http://bit.ly/Security_Certification
+
+ * Want to make a highly secure kiosk, smart display or touchscreen?
+   Here's a step-by-step tutorial for a rainy weekend, or a startup.
+
+   - https://bit.ly/secure-kiosk
+
+
+  Get cloud support with Ubuntu Advantage Cloud Guest:
+    http://www.ubuntu.com/business/services/cloud
+
+56 packages can be updated.
+0 updates are security updates.
+
+
+Last login: Sun Oct 28 04:42:33 2018 from 172.31.28.0
+root@agent:~# su - ubuntu
+ubuntu@agent:~$ ls -a
+.   .Xauthority    .bash_logout  .cache  .profile  .sudo_as_admin_successful
+..  .bash_history  .bashrc       .gnupg  .ssh
+ubuntu@agent:~$ ls .ssh/
+authorized_keys
+ubuntu@agent:~$ exit
+logout
+root@agent:~# exit
+logout
+Connection to agent closed.
+root@master:/etc/ansible/playbooks# ssh ubuntu@agent
+ubuntu@agent: Permission denied (publickey).
+root@master:/etc/ansible/playbooks# ssh root@agent
+Welcome to Ubuntu 18.04.1 LTS (GNU/Linux 4.15.0-1023-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Sun Oct 28 04:46:46 UTC 2018
+
+  System load:  0.0               Processes:           89
+  Usage of /:   24.8% of 7.69GB   Users logged in:     0
+  Memory usage: 30%               IP address for eth0: 172.31.20.30
+  Swap usage:   0%
+
+ * Security certifications for Ubuntu!
+   We now have FIPS, STIG, CC and a CIS Benchmark.
+
+   - http://bit.ly/Security_Certification
+
+ * Want to make a highly secure kiosk, smart display or touchscreen?
+   Here's a step-by-step tutorial for a rainy weekend, or a startup.
+
+   - https://bit.ly/secure-kiosk
+
+
+  Get cloud support with Ubuntu Advantage Cloud Guest:
+    http://www.ubuntu.com/business/services/cloud
+
+56 packages can be updated.
+0 updates are security updates.
+
+
+Last login: Sun Oct 28 04:45:40 2018 from 172.31.28.0
+root@agent:~# su - ubuntu
+ubuntu@agent:~$ ssh-keygen -t rsa
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/ubuntu/.ssh/id_rsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/ubuntu/.ssh/id_rsa.
+Your public key has been saved in /home/ubuntu/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:NxUqHy8J8uORjZHn/XLD+s7BNMf4Ic5BR+85zE9gEwg ubuntu@agent
+The key's randomart image is:
++---[RSA 2048]----+
+|          E..... |
+|         . ......|
+|      . = + ..+..|
+|       o @ *..+*.|
+|        S O oo+*=|
+|       . + oo=o=+|
+|        .   .oB o|
+|             = o |
+|            .o+  |
++----[SHA256]-----+
+ubuntu@agent:~$ cd .ssh
+ubuntu@agent:~/.ssh$ ls
+authorized_keys  id_rsa  id_rsa.pub
+ubuntu@agent:~/.ssh$ cat id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCnkowrxXaFnN/UTZNsoTMMfr2cCUQ20tXFIVCLbaWyluCTKAppuSdjyqoALAUNcBse9OPy+c1dxBvlfMJ3duzAkkL7jVCm7uPTZOc1yhuI5qAlayNa5TgZxby89gXQTYBOAx73vTpwqPDo5oivltcwhLltpW7WVWtP7yFzbBvE8+Ac6MHsPWlwQcbeh6OKqWWiu0oLdEAVKmvPqmT+oAHHBLjbFtoblhw+iM8o7H9EDhynrUHgG+bE5QeUgzaCUx5G+45uNgYhbXnPGsq8NK5xcWVFuMxOJ5hZ+8+D9WT6GB0dUB1srr7AYam3Azp5WmHQzGGfC+4P9OT56Z6EyzZ5 ubuntu@agent
+ubuntu@agent:~/.ssh$ exit
+logout
+root@agent:~# exit
+logout
+Connection to agent closed.
+root@master:/etc/ansible/playbooks# ansible dba -m authorized_key -a "user=root key='ssh-rsa AAAA...XXX == ubuntu@agent'"
+agent | CHANGED => {
+    "changed": true,
+    "comment": null,
+    "exclusive": false,
+    "follow": false,
+    "key": "ssh-rsa AAAA...XXX == ubuntu@agent",
+    "key_options": null,
+    "keyfile": "/root/.ssh/authorized_keys",
+    "manage_dir": true,
+    "path": null,
+    "state": "present",
+    "unique": false,
+    "user": "root",
+    "validate_certs": true
+}
+root@master:/etc/ansible/playbooks# ssh ubuntu@agent
+ubuntu@agent: Permission denied (publickey).
+root@master:/etc/ansible/playbooks# ssh root@agent
+Welcome to Ubuntu 18.04.1 LTS (GNU/Linux 4.15.0-1023-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Sun Oct 28 04:49:25 UTC 2018
+
+  System load:  0.02              Processes:           89
+  Usage of /:   24.8% of 7.69GB   Users logged in:     0
+  Memory usage: 30%               IP address for eth0: 172.31.20.30
+  Swap usage:   0%
+
+ * Security certifications for Ubuntu!
+   We now have FIPS, STIG, CC and a CIS Benchmark.
+
+   - http://bit.ly/Security_Certification
+
+ * Want to make a highly secure kiosk, smart display or touchscreen?
+   Here's a step-by-step tutorial for a rainy weekend, or a startup.
+
+   - https://bit.ly/secure-kiosk
+
+
+  Get cloud support with Ubuntu Advantage Cloud Guest:
+    http://www.ubuntu.com/business/services/cloud
+
+56 packages can be updated.
+0 updates are security updates.
+
+
+Last login: Sun Oct 28 04:48:01 2018 from 172.31.28.0
+root@agent:~# su - ubuntu
+ubuntu@agent:~$ ls
+ubuntu@agent:~$ cat .ssh/authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwjCuWAKCjhHDrIVL46CYAsTl0UtRGuNJfFM4wiByusqMxvD2pwp6iEd95AxNS4dHNTGy38itI7HfM8MX8fm686DKliOS/FYeKyVT7GWfIf1iMYQMCSuLXnQbNqzHo38kpqD8+YpHsva6QUMNOZ8YwH4amrQkAkh0anjXTR1T3vyjfmwRVVImzAkpPLB8L1MZA1nlc4+5IKIj/SEKXgw8ScAp4whIGsYr0TyElLlnvOTmP/zFWs9O10PfzC36FaCimIvWWyYIDMhyJ49dts5/8aEqQVKUe0CXaf3gnW+Bb7N+4JYIbZPs3ez5je/PtbnH6MKJgwkimYBSqZ1fUoxjr aws_pemkey
+ubuntu@agent:~$ exit
+logout
+root@agent:~# exit
+logout
+Connection to agent closed.
+root@master:/etc/ansible/playbooks# ansible all -m lineinfile -a "dest=/etc/group regexp='^(users:x:100:)(.*)' line='\1ldapusername,\2' state=present backrefs=yes"
+master | CHANGED => {
+    "backup": "",
+    "changed": true,
+    "msg": "line replaced"
+}
+agent | CHANGED => {
+    "backup": "",
+    "changed": true,
+    "msg": "line replaced"
+}
+root@master:/etc/ansible/playbooks# ansible dba -m lineinfile -a "dest=/etc/group regexp='^(users:x:100:)(.*)' line='\1ldapusername,\2' state=present backrefs=yes"
+agent | CHANGED => {
+    "backup": "",
+    "changed": true,
+    "msg": "line replaced"
+}
+root@master:/etc/ansible/playbooks# ansible-playbook playbooks/atmo_playbook.yml --user atmouser
+ERROR! the playbook: playbooks/atmo_playbook.yml could not be found
+root@master:/etc/ansible/playbooks# ansible-playbook playbooks/^Cml --user atmouser
+root@master:/etc/ansible/playbooks# ls
+gitinstall.yaml  hosts  import.retry  import.yml  m1.retry  m1.yaml  sample.yml
+root@master:/etc/ansible/playbooks# cat sample.yml
+---
+- hosts: dba
+  tasks:
+          - name: run echo command
+            command: /bin/echo hello raja
+root@master:/etc/ansible/playbooks# ansible-playbook playbooks/sample.yml --user ubuntu
+ERROR! the playbook: playbooks/sample.yml could not be found
+root@master:/etc/ansible/playbooks# ansible-playbook sample.yml --user ubuntu
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+fatal: [agent]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: ubuntu@agent: Permission denied (publickey).\r\n", "unreachable": true}
+        to retry, use: --limit @/etc/ansible/playbooks/sample.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=0    changed=0    unreachable=1    failed=0
+
+root@master:/etc/ansible/playbooks# ansible-playbook sample.yml --user root
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [run echo command] **************************************************************************************
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=0
+
+root@master:/etc/ansible/playbooks# cd ..
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --user root
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [run echo command] **************************************************************************************
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=0
+
+root@master:/etc/ansible# ansible -m ping hosts --private-key=~/.ssh/keys/id_rsa -u dba
+ [WARNING]: Could not match supplied host pattern, ignoring: hosts
+
+ [WARNING]: No hosts matched, nothing to do
+
+root@master:/etc/ansible# ansible -m ping hosts --private-key=~/.ssh/keys/id_rsa -u raja
+ [WARNING]: Could not match supplied host pattern, ignoring: hosts
+
+ [WARNING]: No hosts matched, nothing to do
+
+root@master:/etc/ansible# ansible -m ping hosts --private-key=~/.ssh/keys/id_rsa -u root
+ [WARNING]: Could not match supplied host pattern, ignoring: hosts
+
+ [WARNING]: No hosts matched, nothing to do
+
+root@master:/etc/ansible# ansible -m ping hosts --private-key=~/.ssh/keys/id_rsa -u centos
+ [WARNING]: Could not match supplied host pattern, ignoring: hosts
+
+ [WARNING]: No hosts matched, nothing to do
+
+root@master:/etc/ansible# ansible -m ping dba --private-key=~/.ssh/keys/id_rsa -u root
+agent | UNREACHABLE! => {
+    "changed": false,
+    "msg": "Failed to connect to the host via ssh: no such identity: /root/.ssh/keys/id_rsa: No such file or directory\r\nroot@agent: Permission denied (publickey).\r\n",
+    "unreachable": true
+}
+root@master:/etc/ansible# ansible -m ping dba --private-key=~/.ssh/keys/id_rsa
+agent | UNREACHABLE! => {
+    "changed": false,
+    "msg": "Failed to connect to the host via ssh: no such identity: /root/.ssh/keys/id_rsa: No such file or directory\r\nroot@agent: Permission denied (publickey).\r\n",
+    "unreachable": true
+}
+root@master:/etc/ansible# ansible -m ping dba --private-key=~/.ssh/id_rsa -u root
+agent | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml -e "ATMOUSERNAME=atmouser"
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [run echo command] **************************************************************************************
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=0
+
+root@master:/etc/ansible# cat sample.yml
+cat: sample.yml: No such file or directory
+root@master:/etc/ansible# cat playbooks/sample.yml
+---
+- hosts: dba
+  tasks:
+          - name: run echo command
+            command: /bin/echo hello raja
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit "^C
+root@master:/etc/ansible# ls
+ansible.cfg  hosts  playbooks  roles
+root@master:/etc/ansible# vi host1
+root@master:/etc/ansible# cat host1
+agent
+root@master:/etc/ansible# ansible-playbook playbooks/PLAYBOOK_NAME.yml --limit "host1"
+ERROR! the playbook: playbooks/PLAYBOOK_NAME.yml could not be found
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit "host1"
+ [WARNING]: Could not match supplied host pattern, ignoring: host1
+
+ERROR! Specified hosts and/or --limit does not match any hosts
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit "dba"
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [run echo command] **************************************************************************************
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=0
+
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit "dba,raja"
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [run echo command] **************************************************************************************
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=0
+
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit "all:!raja"
+-bash: !raja: event not found
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit 'all:!raja'
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [run echo command] **************************************************************************************
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=0
+
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit 'all:!dba'
+
+PLAY [dba] ***************************************************************************************************
+skipping: no hosts matched
+
+PLAY RECAP ***************************************************************************************************
+
+root@master:/etc/ansible# cd playbooks/
+root@master:/etc/ansible/playbooks# ansible-playbook sample.yml --limit 'all:!dba'
+
+PLAY [dba] ***************************************************************************************************
+skipping: no hosts matched
+
+PLAY RECAP ***************************************************************************************************
+
+root@master:/etc/ansible/playbooks# cd ..
+root@master:/etc/ansible# ls
+ansible.cfg  host1  hosts  playbooks  roles
+root@master:/etc/ansible# rm -rf host1
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit 'all:!dba'
+
+PLAY [dba] ***************************************************************************************************
+skipping: no hosts matched
+
+PLAY RECAP ***************************************************************************************************
+
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit 'all:!agent'
+
+PLAY [dba] ***************************************************************************************************
+skipping: no hosts matched
+
+PLAY RECAP ***************************************************************************************************
+
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit 'all:!master'
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [run echo command] **************************************************************************************
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=0
+
+root@master:/etc/ansible# ssh root@agent
+Welcome to Ubuntu 18.04.1 LTS (GNU/Linux 4.15.0-1023-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Sun Oct 28 05:09:43 UTC 2018
+
+  System load:  0.0               Processes:           90
+  Usage of /:   24.9% of 7.69GB   Users logged in:     0
+  Memory usage: 30%               IP address for eth0: 172.31.20.30
+  Swap usage:   0%
+
+ * Security certifications for Ubuntu!
+   We now have FIPS, STIG, CC and a CIS Benchmark.
+
+   - http://bit.ly/Security_Certification
+
+ * Want to make a highly secure kiosk, smart display or touchscreen?
+   Here's a step-by-step tutorial for a rainy weekend, or a startup.
+
+   - https://bit.ly/secure-kiosk
+
+
+  Get cloud support with Ubuntu Advantage Cloud Guest:
+    http://www.ubuntu.com/business/services/cloud
+
+56 packages can be updated.
+0 updates are security updates.
+
+
+Last login: Sun Oct 28 05:09:15 2018 from 172.31.28.0
+root@agent:~# exit
+logout
+Connection to agent closed.
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit 'all:!master'
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [run echo command] **************************************************************************************
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=0
+
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit 'all:!agent'
+
+PLAY [dba] ***************************************************************************************************
+skipping: no hosts matched
+
+PLAY RECAP ***************************************************************************************************
+
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit 'dba'
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [run echo command] **************************************************************************************
+changed: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=0
+
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit 'raja'
+
+PLAY [dba] ***************************************************************************************************
+skipping: no hosts matched
+
+PLAY RECAP ***************************************************************************************************
+
+root@master:/etc/ansible# vi hosts
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --limit 'raja'
+
+PLAY [dba] ***************************************************************************************************
+skipping: no hosts matched
+
+PLAY RECAP ***************************************************************************************************
+
+root@master:/etc/ansible# ansible-playbook playbooks/sample.yml --tags 'install'
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=1    changed=0    unreachable=0    failed=0
+
+root@master:/etc/ansible# ansible-playbook playbooks/gitinstall.yaml --tags 'install'
+[DEPRECATION WARNING]: Instead of sudo/sudo_user, use become/become_user and make sure become_method is
+'sudo' (default). This feature will be removed in version 2.9. Deprecation warnings can be disabled by
+setting deprecation_warnings=False in ansible.cfg.
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=1    changed=0    unreachable=0    failed=0
+
+root@master:/etc/ansible# ansible-playbook playbooks/gitinstall.yaml --skip-tags 'sudoers'
+[DEPRECATION WARNING]: Instead of sudo/sudo_user, use become/become_user and make sure become_method is
+'sudo' (default). This feature will be removed in version 2.9. Deprecation warnings can be disabled by
+setting deprecation_warnings=False in ansible.cfg.
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [install packages] **************************************************************************************
+[DEPRECATION WARNING]: Invoking "apt" only once while using a loop via squash_actions is deprecated. Instead
+of using a loop to supply multiple items and specifying `name: {{ item }}`, please use `name: [u'git']` and
+remove the loop. This feature will be removed in version 2.11. Deprecation warnings can be disabled by
+setting deprecation_warnings=False in ansible.cfg.
+ok: [agent] => (item=[u'git'])
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=0    unreachable=0    failed=0
+
+root@master:/etc/ansible# cat playbooks/gitinstall.yaml
+---
+- hosts: agent
+  sudo: yes
+
+  tasks:
+
+  - name: install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+            - git
+root@master:/etc/ansible# ansible-playbook playbooks/gitinstall.yaml --skip-tags 'sudo'
+[DEPRECATION WARNING]: Instead of sudo/sudo_user, use become/become_user and make sure become_method is
+'sudo' (default). This feature will be removed in version 2.9. Deprecation warnings can be disabled by
+setting deprecation_warnings=False in ansible.cfg.
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [install packages] **************************************************************************************
+[DEPRECATION WARNING]: Invoking "apt" only once while using a loop via squash_actions is deprecated. Instead
+of using a loop to supply multiple items and specifying `name: {{ item }}`, please use `name: [u'git']` and
+remove the loop. This feature will be removed in version 2.11. Deprecation warnings can be disabled by
+setting deprecation_warnings=False in ansible.cfg.
+ok: [agent] => (item=[u'git'])
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=0    unreachable=0    failed=0
+
+root@master:/etc/ansible# cd playbooks/
+root@master:/etc/ansible/playbooks# ls
+gitinstall.yaml  hosts  import.retry  import.yml  m1.retry  m1.yaml  sample.retry  sample.yml
+root@master:/etc/ansible/playbooks# vi checkmode.yaml
+root@master:/etc/ansible/playbooks# ansible-playbook checkmode.yaml --flush-cache
+ERROR! playbooks must be a list of plays
+
+The error appears to have been in '/etc/ansible/playbooks/checkmode.yaml': line 1, column 1, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+
+tasks:
+^ here
+
+root@master:/etc/ansible/playbooks# vi checkmode.yaml
+root@master:/etc/ansible/playbooks# ansible-playbook checkmode.yaml --flush-cache
+ERROR! playbooks must be a list of plays
+
+The error appears to have been in '/etc/ansible/playbooks/checkmode.yaml': line 2, column 1, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+---
+tasks:
+^ here
+
+root@master:/etc/ansible/playbooks# vi checkmode.yaml
+root@master:/etc/ansible/playbooks# ansible-playbook checkmode.yaml --flush-cache
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [this task will make changes to the system even in check mode] ******************************************
+fatal: [agent]: FAILED! => {"changed": false, "cmd": "/something/to/run --even-in-check-mode", "msg": "[Errno 2] No such file or directory", "rc": 2}
+        to retry, use: --limit @/etc/ansible/playbooks/checkmode.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=1    changed=0    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks# vi checkmode.yaml
+root@master:/etc/ansible/playbooks# ansible-playbook checkmode.yaml --flush-cache
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [this task will make changes to the system even in check mode] ******************************************
+fatal: [agent]: FAILED! => {"changed": true, "cmd": ["ifconfig", "--even-in-check-mode"], "delta": "0:00:00.004491", "end": "2018-10-28 05:26:24.595709", "msg": "non-zero return code", "rc": 1, "start": "2018-10-28 05:26:24.591218", "stderr": "ifconfig: option `--even-in-check-mode' not recognised.\nifconfig: `--help' gives usage information.", "stderr_lines": ["ifconfig: option `--even-in-check-mode' not recognised.", "ifconfig: `--help' gives usage information."], "stdout": "", "stdout_lines": []}
+        to retry, use: --limit @/etc/ansible/playbooks/checkmode.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=1    changed=0    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks# vi checkmode.yaml
+root@master:/etc/ansible/playbooks# ansible-playbook checkmode.yaml --flush-cache
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [this task will make changes to the system even in check mode] ******************************************
+changed: [agent]
+
+TASK [this task will always run under checkmode and not change the system] ***********************************
+fatal: [agent]: FAILED! => {"changed": false, "msg": "Destination /path/to/myconfig.conf does not exist !", "rc": 257}
+        to retry, use: --limit @/etc/ansible/playbooks/checkmode.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks# ansible-playbook checkmode.yaml --syntax-check
+
+playbook: checkmode.yaml
+root@master:/etc/ansible/playbooks# ansible-playbook checkmode.yaml --check
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [this task will make changes to the system even in check mode] ******************************************
+changed: [agent]
+
+TASK [this task will always run under checkmode and not change the system] ***********************************
+fatal: [agent]: FAILED! => {"changed": false, "msg": "Destination /path/to/myconfig.conf does not exist !", "rc": 257}
+        to retry, use: --limit @/etc/ansible/playbooks/checkmode.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks# vi git.yaml
+root@master:/etc/ansible/playbooks# ansible-playbook gityaml --check
+git.yaml         gitinstall.yaml
+root@master:/etc/ansible/playbooks# ansible-playbook git.yaml
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [this task will be skipped in check mode] ***************************************************************
+fatal: [agent]: FAILED! => {"changed": false, "cmd": "/usr/bin/git clone --origin origin 'ssh:********@github.com:loverajarani/rajarani.git' /home/ubuntu", "msg": "fatal: destination path '/home/ubuntu' already exists and is not an empty directory.", "rc": 128, "stderr": "fatal: destination path '/home/ubuntu' already exists and is not an empty directory.\n", "stderr_lines": ["fatal: destination path '/home/ubuntu' already exists and is not an empty directory."], "stdout": "", "stdout_lines": []}
+        to retry, use: --limit @/etc/ansible/playbooks/git.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=1    changed=0    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks# vi git
+git.retry        git.yaml         gitinstall.yaml
+root@master:/etc/ansible/playbooks# vi git.yaml
+root@master:/etc/ansible/playbooks# ansible-playbook git.yaml
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [this task will be skipped in check mode] ***************************************************************
+fatal: [agent]: FAILED! => {"changed": false, "cmd": "/usr/bin/git clone --origin origin 'ssh:********@github.com:loverajarani/rajarani.git' /home/ubuntu/hello", "msg": "Cloning into '/home/ubuntu/hello'...\nssh: Could not resolve hostname ssh: Temporary failure in name resolution\r\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.", "rc": 128, "stderr": "Cloning into '/home/ubuntu/hello'...\nssh: Could not resolve hostname ssh: Temporary failure in name resolution\r\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.\n", "stderr_lines": ["Cloning into '/home/ubuntu/hello'...", "ssh: Could not resolve hostname ssh: Temporary failure in name resolution", "fatal: Could not read from remote repository.", "", "Please make sure you have the correct access rights", "and the repository exists."], "stdout": "", "stdout_lines": []}
+        to retry, use: --limit @/etc/ansible/playbooks/git.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=1    changed=0    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks# vi git.yaml
+root@master:/etc/ansible/playbooks# ansible-playbook git.yaml
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [this task will be skipped in check mode] ***************************************************************
+fatal: [agent]: FAILED! => {"changed": false, "cmd": "/usr/bin/git clone --origin origin 'ssh:********@github.com:loverajarani/rajarani.git' /root/hello", "msg": "Cloning into '/root/hello'...\nssh: Could not resolve hostname ssh: Temporary failure in name resolution\r\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.", "rc": 128, "stderr": "Cloning into '/root/hello'...\nssh: Could not resolve hostname ssh: Temporary failure in name resolution\r\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.\n", "stderr_lines": ["Cloning into '/root/hello'...", "ssh: Could not resolve hostname ssh: Temporary failure in name resolution", "fatal: Could not read from remote repository.", "", "Please make sure you have the correct access rights", "and the repository exists."], "stdout": "", "stdout_lines": []}
+        to retry, use: --limit @/etc/ansible/playbooks/git.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=1    changed=0    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks# ssh root@agent
+Welcome to Ubuntu 18.04.1 LTS (GNU/Linux 4.15.0-1023-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Sun Oct 28 05:38:46 UTC 2018
+
+  System load:  0.0               Processes:           90
+  Usage of /:   24.9% of 7.69GB   Users logged in:     0
+  Memory usage: 30%               IP address for eth0: 172.31.20.30
+  Swap usage:   0%
+
+ * Security certifications for Ubuntu!
+   We now have FIPS, STIG, CC and a CIS Benchmark.
+
+   - http://bit.ly/Security_Certification
+
+ * Want to make a highly secure kiosk, smart display or touchscreen?
+   Here's a step-by-step tutorial for a rainy weekend, or a startup.
+
+   - https://bit.ly/secure-kiosk
+
+
+  Get cloud support with Ubuntu Advantage Cloud Guest:
+    http://www.ubuntu.com/business/services/cloud
+
+56 packages can be updated.
+0 updates are security updates.
+
+
+Last login: Sun Oct 28 05:38:12 2018 from 172.31.28.0
+root@agent:~# git -version
+unknown option: -version
+usage: git [--version] [--help] [-C <path>] [-c <name>=<value>]
+           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
+           [-p | --paginate | --no-pager] [--no-replace-objects] [--bare]
+           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
+           <command> [<args>]
+root@agent:~# git --version
+git version 2.17.1
+root@agent:~# ls
+abc  abc.txt  snap  xyz.txt
+root@agent:~# mkdir hello
+root@agent:~# ls
+abc  abc.txt  hello  snap  xyz.txt
+root@agent:~# exit
+logout
+Connection to agent closed.
+root@master:/etc/ansible/playbooks# ansible-playbook git.yaml
+
+PLAY [agent] *************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [this task will be skipped in check mode] ***************************************************************
+fatal: [agent]: FAILED! => {"changed": false, "cmd": "/usr/bin/git clone --origin origin 'ssh:********@github.com:loverajarani/rajarani.git' /root/hello", "msg": "Cloning into '/root/hello'...\nssh: Could not resolve hostname ssh: Temporary failure in name resolution\r\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.", "rc": 128, "stderr": "Cloning into '/root/hello'...\nssh: Could not resolve hostname ssh: Temporary failure in name resolution\r\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.\n", "stderr_lines": ["Cloning into '/root/hello'...", "ssh: Could not resolve hostname ssh: Temporary failure in name resolution", "fatal: Could not read from remote repository.", "", "Please make sure you have the correct access rights", "and the repository exists."], "stdout": "", "stdout_lines": []}
+        to retry, use: --limit @/etc/ansible/playbooks/git.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=1    changed=0    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks#
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Session stopped
+    - Press <return> to exit tab
+    - Press R to restart session
+    - Press S to save terminal output to file
+
+Network error: Software caused connection abort
