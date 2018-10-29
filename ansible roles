@@ -1,0 +1,604 @@
+
+
+
+
+
+
+
+
+######################################################################################################################################################################################################3
+############################################################################################################################################################################################################################
+
+root@master:/etc/ansible#
+root@master:/etc/ansible# cd roles
+root@master:/etc/ansible/roles# ansible-galaxy init websphere --offline
+- websphere was created successfully
+root@master:/etc/ansible/roles# ls
+webapp  websphere
+root@master:/etc/ansible/roles# cd websphere/
+root@master:/etc/ansible/roles/websphere# clear
+root@master:/etc/ansible/roles/websphere# ls
+README.md  defaults  files  handlers  meta  tasks  templates  tests  vars
+root@master:/etc/ansible/roles/websphere# apt-get install tree
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+The following packages were automatically installed and are no longer required:
+  apache2-bin apache2-data apache2-utils libapr1 libaprutil1 libaprutil1-dbd-sqlite3 libaprutil1-ldap
+  liblua5.2-0 ssl-cert
+Use 'apt autoremove' to remove them.
+The following NEW packages will be installed:
+  tree
+0 upgraded, 1 newly installed, 0 to remove and 54 not upgraded.
+Need to get 40.7 kB of archives.
+After this operation, 105 kB of additional disk space will be used.
+Get:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu bionic/universe amd64 tree amd64 1.7.0-5 [40.7 kB]
+Fetched 40.7 kB in 0s (3563 kB/s)
+Selecting previously unselected package tree.
+(Reading database ... 89730 files and directories currently installed.)
+Preparing to unpack .../tree_1.7.0-5_amd64.deb ...
+Unpacking tree (1.7.0-5) ...
+Setting up tree (1.7.0-5) ...
+Processing triggers for man-db (2.8.3-2) ...
+root@master:/etc/ansible/roles/websphere# cd ..
+root@master:/etc/ansible/roles# tree websphere/
+websphere/
+├── README.md
+├── defaults
+│   └── main.yml
+├── files
+├── handlers
+│   └── main.yml
+├── meta
+│   └── main.yml
+├── tasks
+│   └── main.yml
+├── templates
+├── tests
+│   ├── inventory
+│   └── test.yml
+└── vars
+    └── main.yml
+
+8 directories, 8 files
+root@master:/etc/ansible/roles# cd websphere/tasks/
+root@master:/etc/ansible/roles/websphere/tasks# vi main.yml
+root@master:/etc/ansible/roles/websphere/tasks# vi install.yml
+root@master:/etc/ansible/roles/websphere/tasks# cat main.yml
+---
+- include: install.yml
+- include: configure.yml
+- include: service.yml
+# tasks file for websphere
+root@master:/etc/ansible/roles/websphere/tasks# vi configure.yml
+root@master:/etc/ansible/roles/websphere/tasks# vi service.yml
+root@master:/etc/ansible/roles/websphere/tasks# cd ..
+root@master:/etc/ansible/roles/websphere# vi handlers/main.yml
+root@master:/etc/ansible/roles/websphere# cd tasks/
+root@master:/etc/ansible/roles/websphere/tasks# cat service.yml
+---
+- name: start servicing
+  service: name=apache2 state=start
+root@master:/etc/ansible/roles/websphere/tasks# cd ..
+root@master:/etc/ansible/roles/websphere# cat handlers/main.yml
+---
+- name: restart apache2 service
+  service: name=apache2 state=restarted
+
+# handlers file for websphere
+root@master:/etc/ansible/roles/websphere# cd ..
+root@master:/etc/ansible/roles# cd ..
+root@master:/etc/ansible# cd roles/
+root@master:/etc/ansible/roles# cd websphere/
+root@master:/etc/ansible/roles/websphere# vi files/index.html
+root@master:/etc/ansible/roles/websphere# vi tasks/configure.yml
+root@master:/etc/ansible/roles/websphere# vi tasks/configure.yml
+root@master:/etc/ansible/roles/websphere# vi meta/main.yml
+root@master:/etc/ansible/roles/websphere# cd ..
+root@master:/etc/ansible/roles# cd ..
+root@master:/etc/ansible# cd playbooks/
+root@master:/etc/ansible/playbooks# vi apache2setup.yml
+root@master:/etc/ansible/playbooks# vi apache2setup.yml
+root@master:/etc/ansible/playbooks# ansible-playbook apache2setup.yml --syntax-check
+
+playbook: apache2setup.yml
+root@master:/etc/ansible/playbooks# ansible-playbook apache2setup.yml
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [websphere : install apache2] ***************************************************************************
+changed: [agent]
+
+TASK [websphere : coping apache2 configuration file] *********************************************************
+An exception occurred during task execution. To see the full traceback, use -vvv. The error was: If you are using a module and expect the file to exist on the remote, see the remote_src option
+fatal: [agent]: FAILED! => {"changed": false, "msg": "Could not find or access '/files/apache2.conf' on the Ansible Controller.\nIf you are using a module and expect the file to exist on the remote, see the remote_src option"}
+        to retry, use: --limit @/etc/ansible/playbooks/apache2setup.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=1    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks#
+root@master:/etc/ansible/playbooks#
+root@master:/etc/ansible/playbooks# cd ..
+root@master:/etc/ansible# vi roles/websphere/tasks/configure.yml
+root@master:/etc/ansible#
+root@master:/etc/ansible#
+root@master:/etc/ansible# ssh root@agent
+Welcome to Ubuntu 18.04.1 LTS (GNU/Linux 4.15.0-1023-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Mon Oct 29 06:07:53 UTC 2018
+
+  System load:  0.0               Processes:           91
+  Usage of /:   24.5% of 7.69GB   Users logged in:     0
+  Memory usage: 31%               IP address for eth0: 172.31.20.30
+  Swap usage:   0%
+
+ * Security certifications for Ubuntu!
+   We now have FIPS, STIG, CC and a CIS Benchmark.
+
+   - http://bit.ly/Security_Certification
+
+ * Want to make a highly secure kiosk, smart display or touchscreen?
+   Here's a step-by-step tutorial for a rainy weekend, or a startup.
+
+   - https://bit.ly/secure-kiosk
+
+
+  Get cloud support with Ubuntu Advantage Cloud Guest:
+    http://www.ubuntu.com/business/services/cloud
+
+ * Canonical Livepatch is available for installation.
+   - Reduce system reboots and improve kernel security. Activate at:
+     https://ubuntu.com/livepatch
+
+56 packages can be updated.
+0 updates are security updates.
+
+
+Last login: Mon Oct 29 05:59:10 2018 from 172.31.28.0
+root@agent:~# ls
+abc  abc.txt  hello  snap  xyz.txt
+root@agent:~# cd /etc/ap
+apache2/    apm/        apparmor/   apparmor.d/ apport/     apt/
+root@agent:~# cd /etc/apache2/
+root@agent:/etc/apache2# ls
+apache2.conf    conf-enabled  magic           mods-enabled  sites-available
+conf-available  envvars       mods-available  ports.conf    sites-enabled
+root@agent:/etc/apache2# pwd
+/etc/apache2
+root@agent:/etc/apache2# scp -r apache2.conf root@18.205.234.96
+root@agent:/etc/apache2# exit
+logout
+Connection to agent closed.
+root@master:/etc/ansible# cd
+root@master:~# ls
+snap
+root@master:~# ssh root@agent
+Welcome to Ubuntu 18.04.1 LTS (GNU/Linux 4.15.0-1023-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Mon Oct 29 06:12:52 UTC 2018
+
+  System load:  0.0               Processes:           92
+  Usage of /:   24.5% of 7.69GB   Users logged in:     0
+  Memory usage: 31%               IP address for eth0: 172.31.20.30
+  Swap usage:   0%
+
+ * Security certifications for Ubuntu!
+   We now have FIPS, STIG, CC and a CIS Benchmark.
+
+   - http://bit.ly/Security_Certification
+
+ * Want to make a highly secure kiosk, smart display or touchscreen?
+   Here's a step-by-step tutorial for a rainy weekend, or a startup.
+
+   - https://bit.ly/secure-kiosk
+
+
+  Get cloud support with Ubuntu Advantage Cloud Guest:
+    http://www.ubuntu.com/business/services/cloud
+
+ * Canonical Livepatch is available for installation.
+   - Reduce system reboots and improve kernel security. Activate at:
+     https://ubuntu.com/livepatch
+
+56 packages can be updated.
+0 updates are security updates.
+
+
+Last login: Mon Oct 29 06:07:54 2018 from 172.31.28.0
+root@agent:~# cd /etc/apache2/
+root@agent:/etc/apache2# scp -r apache2.conf root@18.205.234.96:/etc/ansible/roles/websphere/files
+The authenticity of host '18.205.234.96 (18.205.234.96)' can't be established.
+ECDSA key fingerprint is SHA256:5aiS6jaaWCguCWWaggwl/9yN18FxjDI8QkK2y8c1TgA.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '18.205.234.96' (ECDSA) to the list of known hosts.
+apache2.conf                                                                100% 7224     6.8MB/s   00:00
+root@agent:/etc/apache2# exit
+logout
+Connection to agent closed.
+root@master:~# cd /etc/ansible/roles/
+root@master:/etc/ansible/roles# cd websphere/files/
+root@master:/etc/ansible/roles/websphere/files# ls
+apache2.conf  index.html
+root@master:/etc/ansible/roles/websphere/files# cat apache2.conf
+# This is the main Apache server configuration file.  It contains the
+# configuration directives that give the server its instructions.
+# See http://httpd.apache.org/docs/2.4/ for detailed information about
+# the directives and /usr/share/doc/apache2/README.Debian about Debian specific
+# hints.
+#
+#
+# Summary of how the Apache 2 configuration works in Debian:
+# The Apache 2 web server configuration in Debian is quite different to
+# upstream's suggested way to configure the web server. This is because Debian's
+# default Apache2 installation attempts to make adding and removing modules,
+# virtual hosts, and extra configuration directives as flexible as possible, in
+# order to make automating the changes and administering the server as easy as
+# possible.
+
+# It is split into several files forming the configuration hierarchy outlined
+# below, all located in the /etc/apache2/ directory:
+#
+#       /etc/apache2/
+#       |-- apache2.conf
+#       |       `--  ports.conf
+#       |-- mods-enabled
+#       |       |-- *.load
+#       |       `-- *.conf
+#       |-- conf-enabled
+#       |       `-- *.conf
+#       `-- sites-enabled
+#               `-- *.conf
+#
+#
+# * apache2.conf is the main configuration file (this file). It puts the pieces
+#   together by including all remaining configuration files when starting up the
+#   web server.
+#
+# * ports.conf is always included from the main configuration file. It is
+#   supposed to determine listening ports for incoming connections which can be
+#   customized anytime.
+#
+# * Configuration files in the mods-enabled/, conf-enabled/ and sites-enabled/
+#   directories contain particular configuration snippets which manage modules,
+#   global configuration fragments, or virtual host configurations,
+#   respectively.
+#
+#   They are activated by symlinking available configuration files from their
+#   respective *-available/ counterparts. These should be managed by using our
+#   helpers a2enmod/a2dismod, a2ensite/a2dissite and a2enconf/a2disconf. See
+#   their respective man pages for detailed information.
+#
+# * The binary is called apache2. Due to the use of environment variables, in
+#   the default configuration, apache2 needs to be started/stopped with
+#   /etc/init.d/apache2 or apache2ctl. Calling /usr/bin/apache2 directly will not
+#   work with the default configuration.
+
+
+# Global configuration
+#
+
+#
+# ServerRoot: The top of the directory tree under which the server's
+# configuration, error, and log files are kept.
+#
+# NOTE!  If you intend to place this on an NFS (or otherwise network)
+# mounted filesystem then please read the Mutex documentation (available
+# at <URL:http://httpd.apache.org/docs/2.4/mod/core.html#mutex>);
+# you will save yourself a lot of trouble.
+#
+# Do NOT add a slash at the end of the directory path.
+#
+#ServerRoot "/etc/apache2"
+
+#
+# The accept serialization lock file MUST BE STORED ON A LOCAL DISK.
+#
+#Mutex file:${APACHE_LOCK_DIR} default
+
+#
+# The directory where shm and other runtime files will be stored.
+#
+
+DefaultRuntimeDir ${APACHE_RUN_DIR}
+
+#
+# PidFile: The file in which the server should record its process
+# identification number when it starts.
+# This needs to be set in /etc/apache2/envvars
+#
+PidFile ${APACHE_PID_FILE}
+
+#
+# Timeout: The number of seconds before receives and sends time out.
+#
+Timeout 300
+
+#
+# KeepAlive: Whether or not to allow persistent connections (more than
+# one request per connection). Set to "Off" to deactivate.
+#
+KeepAlive On
+
+#
+# MaxKeepAliveRequests: The maximum number of requests to allow
+# during a persistent connection. Set to 0 to allow an unlimited amount.
+# We recommend you leave this number high, for maximum performance.
+#
+MaxKeepAliveRequests 100
+
+#
+# KeepAliveTimeout: Number of seconds to wait for the next request from the
+# same client on the same connection.
+#
+KeepAliveTimeout 5
+
+
+# These need to be set in /etc/apache2/envvars
+User ${APACHE_RUN_USER}
+Group ${APACHE_RUN_GROUP}
+
+#
+# HostnameLookups: Log the names of clients or just their IP addresses
+# e.g., www.apache.org (on) or 204.62.129.132 (off).
+# The default is off because it'd be overall better for the net if people
+# had to knowingly turn this feature on, since enabling it means that
+# each client request will result in AT LEAST one lookup request to the
+# nameserver.
+#
+HostnameLookups Off
+
+# ErrorLog: The location of the error log file.
+# If you do not specify an ErrorLog directive within a <VirtualHost>
+# container, error messages relating to that virtual host will be
+# logged here.  If you *do* define an error logfile for a <VirtualHost>
+# container, that host's errors will be logged there and not here.
+#
+ErrorLog ${APACHE_LOG_DIR}/error.log
+
+#
+# LogLevel: Control the severity of messages logged to the error_log.
+# Available values: trace8, ..., trace1, debug, info, notice, warn,
+# error, crit, alert, emerg.
+# It is also possible to configure the log level for particular modules, e.g.
+# "LogLevel info ssl:warn"
+#
+LogLevel warn
+
+# Include module configuration:
+IncludeOptional mods-enabled/*.load
+IncludeOptional mods-enabled/*.conf
+
+# Include list of ports to listen on
+Include ports.conf
+
+
+# Sets the default security model of the Apache2 HTTPD server. It does
+# not allow access to the root filesystem outside of /usr/share and /var/www.
+# The former is used by web applications packaged in Debian,
+# the latter may be used for local directories served by the web server. If
+# your system is serving content from a sub-directory in /srv you must allow
+# access here, or in any related virtual host.
+<Directory />
+        Options FollowSymLinks
+        AllowOverride None
+        Require all denied
+</Directory>
+
+<Directory /usr/share>
+        AllowOverride None
+        Require all granted
+</Directory>
+
+<Directory /var/www/>
+        Options Indexes FollowSymLinks
+        AllowOverride None
+        Require all granted
+</Directory>
+
+#<Directory /srv/>
+#       Options Indexes FollowSymLinks
+#       AllowOverride None
+#       Require all granted
+#</Directory>
+
+
+
+
+# AccessFileName: The name of the file to look for in each directory
+# for additional configuration directives.  See also the AllowOverride
+# directive.
+#
+AccessFileName .htaccess
+
+#
+# The following lines prevent .htaccess and .htpasswd files from being
+# viewed by Web clients.
+#
+<FilesMatch "^\.ht">
+        Require all denied
+</FilesMatch>
+
+
+#
+# The following directives define some format nicknames for use with
+# a CustomLog directive.
+#
+# These deviate from the Common Log Format definitions in that they use %O
+# (the actual bytes sent including headers) instead of %b (the size of the
+# requested file), because the latter makes it impossible to detect partial
+# requests.
+#
+# Note that the use of %{X-Forwarded-For}i instead of %h is not recommended.
+# Use mod_remoteip instead.
+#
+LogFormat "%v:%p %h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" vhost_combined
+LogFormat "%h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" combined
+LogFormat "%h %l %u %t \"%r\" %>s %O" common
+LogFormat "%{Referer}i -> %U" referer
+LogFormat "%{User-agent}i" agent
+
+# Include of directories ignores editors' and dpkg's backup files,
+# see README.Debian for details.
+
+# Include generic snippets of statements
+IncludeOptional conf-enabled/*.conf
+
+# Include the virtual host configurations:
+IncludeOptional sites-enabled/*.conf
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+root@master:/etc/ansible/roles/websphere/files# cd ..
+root@master:/etc/ansible/roles/websphere# cd ..
+root@master:/etc/ansible/roles# cd ..
+root@master:/etc/ansible# cd playbooks/
+root@master:/etc/ansible/playbooks# ansible-playbook apache2setup.yml --syntax-check
+
+playbook: apache2setup.yml
+root@master:/etc/ansible/playbooks# ansible-playbook apache2setup.yml
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [websphere : install apache2] ***************************************************************************
+ok: [agent]
+
+TASK [websphere : coping apache2 configuration file] *********************************************************
+An exception occurred during task execution. To see the full traceback, use -vvv. The error was: If you are using a module and expect the file to exist on the remote, see the remote_src option
+fatal: [agent]: FAILED! => {"changed": false, "msg": "Could not find or access '/files/apache2.conf' on the Ansible Controller.\nIf you are using a module and expect the file to exist on the remote, see the remote_src option"}
+        to retry, use: --limit @/etc/ansible/playbooks/apache2setup.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=2    changed=0    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks# cd ..
+root@master:/etc/ansible# cd roles/websphere/
+root@master:/etc/ansible/roles/websphere# ls
+README.md  defaults  files  handlers  meta  tasks  templates  tests  vars
+root@master:/etc/ansible/roles/websphere# cd tasks/
+root@master:/etc/ansible/roles/websphere/tasks# ls
+configure.yml  install.yml  main.yml  service.yml
+root@master:/etc/ansible/roles/websphere/tasks# vi configure.yml
+root@master:/etc/ansible/roles/websphere/tasks# cd ..
+root@master:/etc/ansible/roles/websphere# cd ..
+root@master:/etc/ansible/roles# cd .
+root@master:/etc/ansible/roles# cd ..
+root@master:/etc/ansible# cd playbooks/
+root@master:/etc/ansible/playbooks# ansible-playbook apache2setup.yml
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [websphere : install apache2] ***************************************************************************
+ok: [agent]
+
+TASK [websphere : coping apache2 configuration file] *********************************************************
+ok: [agent]
+
+TASK [websphere : send index.html] ***************************************************************************
+changed: [agent]
+
+TASK [websphere : start servicing] ***************************************************************************
+fatal: [agent]: FAILED! => {"changed": false, "msg": "value of state must be one of: reloaded, restarted, started, stopped, got: start"}
+        to retry, use: --limit @/etc/ansible/playbooks/apache2setup.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=4    changed=1    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks#
+root@master:/etc/ansible/playbooks#
+root@master:/etc/ansible/playbooks#
+root@master:/etc/ansible/playbooks#
+root@master:/etc/ansible/playbooks#
+root@master:/etc/ansible/playbooks#
+root@master:/etc/ansible/playbooks#
+root@master:/etc/ansible/playbooks# ansible-playbook apache2setup.yml
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [websphere : install apache2] ***************************************************************************
+ok: [agent]
+
+TASK [websphere : coping apache2 configuration file] *********************************************************
+ok: [agent]
+
+TASK [websphere : send index.html] ***************************************************************************
+ok: [agent]
+
+TASK [websphere : start servicing] ***************************************************************************
+fatal: [agent]: FAILED! => {"changed": false, "msg": "value of state must be one of: reloaded, restarted, started, stopped, got: start"}
+        to retry, use: --limit @/etc/ansible/playbooks/apache2setup.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=4    changed=0    unreachable=0    failed=1
+
+root@master:/etc/ansible/playbooks# cd ..
+root@master:/etc/ansible# vi roles/websphere/tasks/configure.yml
+root@master:/etc/ansible# vi roles/websphere/tasks/configure.yml
+root@master:/etc/ansible# ansible-playbook apache2setup.yml
+ERROR! the playbook: apache2setup.yml could not be found
+root@master:/etc/ansible# ansible-playbook playbooks/apache2setup.yml
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [websphere : install apache2] ***************************************************************************
+ok: [agent]
+
+TASK [websphere : coping apache2 configuration file] *********************************************************
+ok: [agent]
+
+TASK [websphere : send index.html] ***************************************************************************
+ok: [agent]
+
+TASK [websphere : start servicing] ***************************************************************************
+fatal: [agent]: FAILED! => {"changed": false, "msg": "value of state must be one of: reloaded, restarted, started, stopped, got: start"}
+        to retry, use: --limit @/etc/ansible/playbooks/apache2setup.retry
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=4    changed=0    unreachable=0    failed=1
+
+root@master:/etc/ansible# vi roles/websphere/tasks/service.yml
+root@master:/etc/ansible# ansible-playbook playbooks/apache2setup.yml
+
+PLAY [dba] ***************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************
+ok: [agent]
+
+TASK [websphere : install apache2] ***************************************************************************
+ok: [agent]
+
+TASK [websphere : coping apache2 configuration file] *********************************************************
+ok: [agent]
+
+TASK [websphere : send index.html] ***************************************************************************
+ok: [agent]
+
+TASK [websphere : start servicing] ***************************************************************************
+ok: [agent]
+
+PLAY RECAP ***************************************************************************************************
+agent                      : ok=5    changed=0    unreachable=0    failed=0
+
+root@master:/etc/ansible#
