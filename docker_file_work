@@ -1,0 +1,870 @@
+Access denied
+docker@169.254.104.13's password:
+     ┌────────────────────────────────────────────────────────────────────┐
+     │                        • MobaXterm 10.8 •                          │
+     │            (SSH client, X-server and networking tools)             │
+     │                                                                    │
+     │ ➤ SSH session to docker@169.254.104.13                             │
+     │   • SSH compression : ✔                                            │
+     │   • SSH-browser     : ✔                                            │
+     │   • X11-forwarding  : ✘  (disabled or not supported by server)     │
+     │   • DISPLAY         : 192.168.0.118:0.0                            │
+     │                                                                    │
+     │ ➤ For more info, ctrl+click on help or visit our website           │
+     └────────────────────────────────────────────────────────────────────┘
+
+                        ##         .
+                  ## ## ##        ==
+               ## ## ## ## ##    ===
+           /"""""""""""""""""\___/ ===
+      ~~~ {~~ ~~~~ ~~~ ~~~~ ~~~ ~ /  ===- ~~~
+           \______ o           __/
+             \    \         __/
+              \____\_______/
+ _                 _   ____     _            _
+| |__   ___   ___ | |_|___ \ __| | ___   ___| | _____ _ __
+| '_ \ / _ \ / _ \| __| __) / _` |/ _ \ / __| |/ / _ \ '__|
+| |_) | (_) | (_) | |_ / __/ (_| | (_) | (__|   <  __/ |
+|_.__/ \___/ \___/ \__|_____\__,_|\___/ \___|_|\_\___|_|
+Boot2Docker version 18.06.1-ce, build HEAD : c7e5c3e - Wed Aug 22 16:27:42 UTC 2                              018
+Docker version 18.06.1-ce, build e68fc7a
+docker@default:~$
+docker@default:~$
+docker@default:~$ sudo -i
+Boot2Docker version 18.06.1-ce, build HEAD : c7e5c3e - Wed Aug 22 16:27:42 UTC 2018
+Docker version 18.06.1-ce, build e68fc7a
+root@default:~# clear
+root@default:~# docker login
+Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: rajarani
+Password:
+WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+root@default:~# docker info
+Containers: 1
+ Running: 0
+ Paused: 0
+ Stopped: 1
+Images: 1
+Server Version: 18.06.1-ce
+Storage Driver: aufs
+ Root Dir: /mnt/sda1/var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 8
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host macvlan null overlay
+ Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 468a545b9edcd5932818eb9de8e72413e616e86e
+runc version: 69663f0bd4b60df09991c08812a60108003fa340
+init version: fec3683
+Security Options:
+ seccomp
+  Profile: default
+Kernel Version: 4.9.93-boot2docker
+Operating System: Boot2Docker 18.06.1-ce (TCL 8.2.1); HEAD : c7e5c3e - Wed Aug 22 16:27:42 UTC 2018
+OSType: linux
+Architecture: x86_64
+CPUs: 1
+Total Memory: 995.6MiB
+Name: default
+ID: QKFF:NW4D:3G4B:VJC4:HVUR:FXLG:TSPV:4NBG:EQVA:GIMG:L3ET:YUI4
+Docker Root Dir: /mnt/sda1/var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+No Proxy: 192.168.99.100
+Username: rajarani
+Registry: https://index.docker.io/v1/
+Labels:
+ provider=virtualbox
+Experimental: false
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false
+
+root@default:~# docker ps -a
+CONTAINER ID        IMAGE                     COMMAND             CREATED             STATUS                        PORTS                    NAMES
+e19e15f0daf3        ansible/centos7-ansible   "/bin/bash"         27 hours ago        Exited (255) 37 minutes ago   0.0.0.0:8000->9000/tcp   zealous_wing
+root@default:~# docker images
+REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+ansible/centos7-ansible   latest              688353a31fde        22 months ago       447MB
+root@default:~# cat .docker/config.json
+{
+        "auths": {
+                "https://index.docker.io/v1/": {
+                        "auth": "cmFqYXJhbmk6cmFqYXJhbmk="
+                }
+        },
+        "HttpHeaders": {
+                "User-Agent": "Docker-Client/18.06.1-ce (linux)"
+        }
+}root@default:~# docker search rajarani/*
+NAME                                       DESCRIPTION                                     STARS               OFFICIAL            AUTOMATED
+onardmartin19a9/rajaranimoviedialogu7554   Raja Rani Movie Dialogue Ringtones Free Down…   0                  
+rajarani/aws                               for creating images                             0                  
+root@default:~# docker build rajarani/aws registry
+"docker build" requires exactly 1 argument.
+See 'docker build --help'.
+
+Usage:  docker build [OPTIONS] PATH | URL | -
+
+Build an image from a Dockerfile
+root@default:~# ls
+root@default:~# docker pull ubuntu
+Using default tag: latest
+latest: Pulling from library/ubuntu
+473ede7ed136: Pull complete
+c46b5fa4d940: Pull complete
+93ae3df89c92: Pull complete
+6b1eed27cade: Pull complete
+Digest: sha256:29934af957c53004d7fb6340139880d23fb1952505a15d69a03af0d1418878cb
+Status: Downloaded newer image for ubuntu:latest
+root@default:~# vi dockerfile
+root@default:~# docker build rajarani/aws registry
+"docker build" requires exactly 1 argument.
+See 'docker build --help'.
+
+Usage:  docker build [OPTIONS] PATH | URL | -
+
+Build an image from a Dockerfile
+root@default:~# docker push rajarani/aws
+The push refers to repository [docker.io/rajarani/aws]
+An image does not exist locally with the tag: rajarani/aws
+root@default:~# docker images
+REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+ubuntu                    latest              ea4c82dcd15a        2 weeks ago         85.8MB
+ansible/centos7-ansible   latest              688353a31fde        22 months ago       447MB
+root@default:~# docker run --name registry -d -p 5000:5000 rajarani/aws
+Unable to find image 'rajarani/aws:latest' locally
+docker: Error response from daemon: manifest for rajarani/aws:latest not found.
+See 'docker run --help'.
+root@default:~# docker run --name registry -d -p 5000:5000 rajarani/aws ubuntu
+Unable to find image 'rajarani/aws:latest' locally
+docker: Error response from daemon: manifest for rajarani/aws:latest not found.
+See 'docker run --help'.
+root@default:~# docker images
+REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+ubuntu                    latest              ea4c82dcd15a        2 weeks ago         85.8MB
+ansible/centos7-ansible   latest              688353a31fde        22 months ago       447MB
+root@default:~# docker tag ea4c82dcd15a rajarani/ubuntu:yogitry
+root@default:~# docker push rajarani/ubuntu
+The push refers to repository [docker.io/rajarani/ubuntu]
+76c033092e10: Mounted from library/ubuntu
+2146d867acf3: Mounted from library/ubuntu
+ae1f631f14b7: Mounted from library/ubuntu
+102645f1cf72: Mounted from library/ubuntu
+yogitry: digest: sha256:6b9eb699512656fc6ef936ddeb45ab25edcd17ab94901790989f89dbf782344a size: 1150
+root@default:~# docker images
+REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+ubuntu                    latest              ea4c82dcd15a        2 weeks ago         85.8MB
+rajarani/ubuntu           yogitry             ea4c82dcd15a        2 weeks ago         85.8MB
+ansible/centos7-ansible   latest              688353a31fde        22 months ago       447MB
+root@default:~# docker pull rajarani/ubuntu
+Using default tag: latest
+Error response from daemon: manifest for rajarani/ubuntu:latest not found
+root@default:~# docker pull rajarani/ubuntu yogitry
+"docker pull" requires exactly 1 argument.
+See 'docker pull --help'.
+
+Usage:  docker pull [OPTIONS] NAME[:TAG|@DIGEST]
+
+Pull an image or a repository from a registry
+root@default:~# docker save rajarani/ubuntu > rajarani.tar
+root@default:~# docker load --input rajarani.tar
+Loaded image: rajarani/ubuntu:yogitry
+root@default:~# docker images
+REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+ubuntu                    latest              ea4c82dcd15a        2 weeks ago         85.8MB
+rajarani/ubuntu           yogitry             ea4c82dcd15a        2 weeks ago         85.8MB
+ansible/centos7-ansible   latest              688353a31fde        22 months ago       447MB
+root@default:~# docker tag 688353a31fde rajarani/aws:latest
+root@default:~# docker images
+REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+ubuntu                    latest              ea4c82dcd15a        2 weeks ago         85.8MB
+rajarani/ubuntu           yogitry             ea4c82dcd15a        2 weeks ago         85.8MB
+ansible/centos7-ansible   latest              688353a31fde        22 months ago       447MB
+rajarani/aws              latest              688353a31fde        22 months ago       447MB
+root@default:~# docker push rajarani/aws
+The push refers to repository [docker.io/rajarani/aws]
+cf4eb7184a66: Mounted from ansible/centos7-ansible
+596e51307fcb: Mounted from ansible/centos7-ansible
+7794e20d52b7: Mounted from ansible/centos7-ansible
+f8c414e271fb: Mounted from ansible/centos7-ansible
+0d1585b29470: Mounted from ansible/centos7-ansible
+34e7b85d83e4: Mounted from ansible/centos7-ansible
+latest: digest: sha256:39eff7d56b96530d014083cd343f7314c23acbd1ecf37eb75a71a2f6584d0b02 size: 1574
+root@default:~# docker logout
+Removing login credentials for https://index.docker.io/v1/
+root@default:~# docker images
+REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+ubuntu                    latest              ea4c82dcd15a        2 weeks ago         85.8MB
+rajarani/ubuntu           yogitry             ea4c82dcd15a        2 weeks ago         85.8MB
+ansible/centos7-ansible   latest              688353a31fde        22 months ago       447MB
+rajarani/aws              latest              688353a31fde        22 months ago       447MB
+root@default:~# docker -rmi rajarani/ubuntu
+unknown shorthand flag: 'r' in -rmi
+See 'docker --help'.
+
+Usage:  docker [OPTIONS] COMMAND
+
+A self-sufficient runtime for containers
+
+Options:
+      --config string      Location of client config files (default "/root/.docker")
+  -D, --debug              Enable debug mode
+  -H, --host list          Daemon socket(s) to connect to
+  -l, --log-level string   Set the logging level ("debug"|"info"|"warn"|"error"|"fatal") (default "info")
+      --tls                Use TLS; implied by --tlsverify
+      --tlscacert string   Trust certs signed only by this CA (default "/root/.docker/ca.pem")
+      --tlscert string     Path to TLS certificate file (default "/root/.docker/cert.pem")
+      --tlskey string      Path to TLS key file (default "/root/.docker/key.pem")
+      --tlsverify          Use TLS and verify the remote
+  -v, --version            Print version information and quit
+
+Management Commands:
+  checkpoint  Manage checkpoints
+  config      Manage Docker configs
+  container   Manage containers
+  image       Manage images
+  manifest    Manage Docker image manifests and manifest lists
+  network     Manage networks
+  node        Manage Swarm nodes
+  plugin      Manage plugins
+  secret      Manage Docker secrets
+  service     Manage services
+  stack       Manage Docker stacks
+  swarm       Manage Swarm
+  system      Manage Docker
+  trust       Manage trust on Docker images
+  volume      Manage volumes
+
+Commands:
+  attach      Attach local standard input, output, and error streams to a running container
+  build       Build an image from a Dockerfile
+  commit      Create a new image from a container's changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  deploy      Deploy a new stack or update an existing stack
+  diff        Inspect changes to files or directories on a container's filesystem
+  events      Get real time events from the server
+  exec        Run a command in a running container
+  export      Export a container's filesystem as a tar archive
+  history     Show the history of an image
+  images      List images
+  import      Import the contents from a tarball to create a filesystem image
+  info        Display system-wide information
+  inspect     Return low-level information on Docker objects
+  kill        Kill one or more running containers
+  load        Load an image from a tar archive or STDIN
+  login       Log in to a Docker registry
+  logout      Log out from a Docker registry
+  logs        Fetch the logs of a container
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  ps          List containers
+  pull        Pull an image or a repository from a registry
+  push        Push an image or a repository to a registry
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  rmi         Remove one or more images
+  run         Run a command in a new container
+  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+  search      Search the Docker Hub for images
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  version     Show the Docker version information
+  wait        Block until one or more containers stop, then print their exit codes
+
+Run 'docker COMMAND --help' for more information on a command.
+
+root@default:~# docker rmi rajarani/ubuntu
+Error: No such image: rajarani/ubuntu
+root@default:~# docker images
+REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+ubuntu                    latest              ea4c82dcd15a        2 weeks ago         85.8MB
+rajarani/ubuntu           yogitry             ea4c82dcd15a        2 weeks ago         85.8MB
+ansible/centos7-ansible   latest              688353a31fde        22 months ago       447MB
+rajarani/aws              latest              688353a31fde        22 months ago       447MB
+root@default:~# docker rmi rajarani/ubuntu
+Error: No such image: rajarani/ubuntu
+root@default:~# docker rmi rajarani/ubuntu
+Error: No such image: rajarani/ubuntu
+root@default:~# docker rmi ea4c82dcd15a
+Error response from daemon: conflict: unable to delete ea4c82dcd15a (must be forced) - image is referenced in multiple repositories
+root@default:~# docker rmi -f ea4c82dcd15a
+Untagged: ubuntu:latest
+Untagged: ubuntu@sha256:29934af957c53004d7fb6340139880d23fb1952505a15d69a03af0d1418878cb
+Untagged: rajarani/ubuntu:yogitry
+Untagged: rajarani/ubuntu@sha256:6b9eb699512656fc6ef936ddeb45ab25edcd17ab94901790989f89dbf782344a
+Deleted: sha256:ea4c82dcd15a33e3e9c4c37050def20476856a08e59526fbe533cc4e98387e39
+Deleted: sha256:2ac9356b41d2d032dc980b6ee2b2a911790a47b59b4fcfd92e52a0729a389403
+Deleted: sha256:f19c7e29a7e3fbaf44997bab14791e3d3d26d689bc3e2e720a9d5d8a77f68d6c
+Deleted: sha256:b951bb1959dc1a5dfeda46229b36b33c4cc01e3f682ee1b77af8dab1cc7cf8a3
+Deleted: sha256:102645f1cf722254bbfb7135b524db45fbbac400e79e4d54266c000a5f5bc400
+root@default:~# docker images
+REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+ansible/centos7-ansible   latest              688353a31fde        22 months ago       447MB
+rajarani/aws              latest              688353a31fde        22 months ago       447MB
+root@default:~# docker rmi rajarani/aws
+Untagged: rajarani/aws:latest
+Untagged: rajarani/aws@sha256:39eff7d56b96530d014083cd343f7314c23acbd1ecf37eb75a71a2f6584d0b02
+root@default:~# docker images
+REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+ansible/centos7-ansible   latest              688353a31fde        22 months ago       447MB
+root@default:~# docker rmi 688353a31fde
+Error response from daemon: conflict: unable to delete 688353a31fde (must be forced) - image is being used by stopped container e19e15f0daf3
+root@default:~# docker rmi -f 688353a31fde
+Untagged: ansible/centos7-ansible:latest
+Untagged: ansible/centos7-ansible@sha256:39eff7d56b96530d014083cd343f7314c23acbd1ecf37eb75a71a2f6584d0b02
+Deleted: sha256:688353a31fdee02a966d1f83e9210f77b5a63baaaacbedb81ca35f6231cfeb6c
+root@default:~# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+root@default:~# docker pull rajarani/ubuntu
+Using default tag: latest
+Error response from daemon: manifest for rajarani/ubuntu:latest not found
+root@default:~# docker pull rajarani/ubuntu yogitry
+"docker pull" requires exactly 1 argument.
+See 'docker pull --help'.
+
+Usage:  docker pull [OPTIONS] NAME[:TAG|@DIGEST]
+
+Pull an image or a repository from a registry
+root@default:~# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+root@default:~# docker pull rajarani/ubuntu
+Using default tag: latest
+Error response from daemon: manifest for rajarani/ubuntu:latest not found
+root@default:~# docker pull rajarani/ubuntu:yogitry
+yogitry: Pulling from rajarani/ubuntu
+473ede7ed136: Pull complete
+c46b5fa4d940: Pull complete
+93ae3df89c92: Pull complete
+6b1eed27cade: Pull complete
+Digest: sha256:6b9eb699512656fc6ef936ddeb45ab25edcd17ab94901790989f89dbf782344a
+Status: Downloaded newer image for rajarani/ubuntu:yogitry
+root@default:~# docker push rajarani/ubuntu:latest
+The push refers to repository [docker.io/rajarani/ubuntu]
+tag does not exist: rajarani/ubuntu:latest
+root@default:~# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+rajarani/ubuntu     yogitry             ea4c82dcd15a        2 weeks ago         85.8MB
+root@default:~# docker tag ea4c82dcd15a rajarani/ubuntu:latest
+root@default:~# docker pull rajarani/ubuntu
+Using default tag: latest
+Error response from daemon: manifest for rajarani/ubuntu:latest not found
+root@default:~# docker push rajarani/ubuntu
+The push refers to repository [docker.io/rajarani/ubuntu]
+76c033092e10: Layer already exists
+2146d867acf3: Layer already exists
+ae1f631f14b7: Layer already exists
+102645f1cf72: Layer already exists
+errors:
+denied: requested access to the resource is denied
+unauthorized: authentication required
+
+root@default:~# docker login rajarani/rajarani
+Username: rajarani
+Password:
+Error response from daemon: Get https://rajarani/v2/: dial tcp: lookup rajarani on 10.0.2.3:53: no such host
+root@default:~# docker login
+Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: rajarani
+Password:
+WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+root@default:~# docker push rajarani/ubuntu
+The push refers to repository [docker.io/rajarani/ubuntu]
+76c033092e10: Layer already exists
+2146d867acf3: Layer already exists
+ae1f631f14b7: Layer already exists
+102645f1cf72: Layer already exists
+latest: digest: sha256:6b9eb699512656fc6ef936ddeb45ab25edcd17ab94901790989f89dbf782344a size: 1150
+76c033092e10: Layer already exists
+2146d867acf3: Layer already exists
+ae1f631f14b7: Layer already exists
+102645f1cf72: Layer already exists
+yogitry: digest: sha256:6b9eb699512656fc6ef936ddeb45ab25edcd17ab94901790989f89dbf782344a size: 1150
+root@default:~# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+rajarani/ubuntu     latest              ea4c82dcd15a        2 weeks ago         85.8MB
+rajarani/ubuntu     yogitry             ea4c82dcd15a        2 weeks ago         85.8MB
+root@default:~# docker rmi -f rajarani/ubuntu:yogitry
+Untagged: rajarani/ubuntu:yogitry
+root@default:~# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+rajarani/ubuntu     latest              ea4c82dcd15a        2 weeks ago         85.8MB
+root@default:~# docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                           PORTS                    NAMES
+e19e15f0daf3        688353a31fde        "/bin/bash"         27 hours ago        Exited (255) About an hour ago   0.0.0.0:8000->9000/tcp   zealous_wing
+root@default:~# docker rm -f zealous_wing
+zealous_wing
+root@default:~# docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+root@default:~# docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+root@default:~# clear
+root@default:~# docker logout
+Removing login credentials for https://index.docker.io/v1/
+root@default:~# docker --help
+
+Usage:  docker [OPTIONS] COMMAND
+
+A self-sufficient runtime for containers
+
+Options:
+      --config string      Location of client config files (default "/root/.docker")
+  -D, --debug              Enable debug mode
+  -H, --host list          Daemon socket(s) to connect to
+  -l, --log-level string   Set the logging level ("debug"|"info"|"warn"|"error"|"fatal") (default "info")
+      --tls                Use TLS; implied by --tlsverify
+      --tlscacert string   Trust certs signed only by this CA (default "/root/.docker/ca.pem")
+      --tlscert string     Path to TLS certificate file (default "/root/.docker/cert.pem")
+      --tlskey string      Path to TLS key file (default "/root/.docker/key.pem")
+      --tlsverify          Use TLS and verify the remote
+  -v, --version            Print version information and quit
+
+Management Commands:
+  config      Manage Docker configs
+  container   Manage containers
+  image       Manage images
+  network     Manage networks
+  node        Manage Swarm nodes
+  plugin      Manage plugins
+  secret      Manage Docker secrets
+  service     Manage services
+  stack       Manage Docker stacks
+  swarm       Manage Swarm
+  system      Manage Docker
+  trust       Manage trust on Docker images
+  volume      Manage volumes
+
+Commands:
+  attach      Attach local standard input, output, and error streams to a running container
+  build       Build an image from a Dockerfile
+  commit      Create a new image from a container's changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  diff        Inspect changes to files or directories on a container's filesystem
+  events      Get real time events from the server
+  exec        Run a command in a running container
+  export      Export a container's filesystem as a tar archive
+  history     Show the history of an image
+  images      List images
+  import      Import the contents from a tarball to create a filesystem image
+  info        Display system-wide information
+  inspect     Return low-level information on Docker objects
+  kill        Kill one or more running containers
+  load        Load an image from a tar archive or STDIN
+  login       Log in to a Docker registry
+  logout      Log out from a Docker registry
+  logs        Fetch the logs of a container
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  ps          List containers
+  pull        Pull an image or a repository from a registry
+  push        Push an image or a repository to a registry
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  rmi         Remove one or more images
+  run         Run a command in a new container
+  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+  search      Search the Docker Hub for images
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  version     Show the Docker version information
+  wait        Block until one or more containers stop, then print their exit codes
+
+Run 'docker COMMAND --help' for more information on a command.
+root@default:~# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+rajarani/ubuntu     latest              ea4c82dcd15a        2 weeks ago         85.8MB
+root@default:~# docker commit ea4c82dcd15a rajarani/ubuntu:ubunturaja
+Error response from daemon: No such container: ea4c82dcd15a
+root@default:~# docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+99d170406ba6        bridge              bridge              local
+0f7f6f946770        host                host                local
+ec4afaedbf22        none                null                local
+root@default:~# docker network create bridge awsnw --subnet=172.21.0.0/24
+"docker network create" requires exactly 1 argument.
+See 'docker network create --help'.
+
+Usage:  docker network create [OPTIONS] NETWORK
+
+Create a network
+root@default:~# docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+99d170406ba6        bridge              bridge              local
+0f7f6f946770        host                host                local
+ec4afaedbf22        none                null                local
+root@default:~# docker network create awsnw --subnet=172.21.0.0/24
+a409e446efc90f9a5b32dbe32328895d1dd110d1e28a1f0c4b1f9533b31a3003
+root@default:~# docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+a409e446efc9        awsnw               bridge              local
+99d170406ba6        bridge              bridge              local
+0f7f6f946770        host                host                local
+ec4afaedbf22        none                null                local
+root@default:~# docker run -tid --name=jenkins --net=awsnw --subnet=172.21.10.0/16 -p 4091:4081 ubuntu /bin/ba
+sh
+unknown flag: --subnet
+See 'docker run --help'.
+root@default:~# docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+root@default:~# docker run -tid --name=jenkins --net=awsnw --subnet=172.21.0.0/16 -p 4091:4081 ubuntu /bin/bas
+h
+unknown flag: --subnet
+See 'docker run --help'.
+root@default:~# docker run -tid --name=jenkins --net=awsnw --subnet=172.21.0.0/24 -p 4091:4081 ubuntu /bin/bas
+h
+unknown flag: --subnet
+See 'docker run --help'.
+root@default:~# docker run -tid --name=jenkins --net=awsnw  -p 4091:4081 ubuntu /bin/bash
+Unable to find image 'ubuntu:latest' locally
+latest: Pulling from library/ubuntu
+Digest: sha256:29934af957c53004d7fb6340139880d23fb1952505a15d69a03af0d1418878cb
+Status: Downloaded newer image for ubuntu:latest
+09ae21d6ee3668a8672d299e021267dde321f73597b3b5fe7c7894ed75896e7a
+root@default:~# docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                    NAMES
+09ae21d6ee36        ubuntu              "/bin/bash"         20 seconds ago      Up 16 seconds       0.0.0.0:4091->4081/tcp   jenkins
+root@default:~# docker rm -f jenkins
+jenkins
+root@default:~# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+ubuntu              latest              ea4c82dcd15a        2 weeks ago         85.8MB
+rajarani/ubuntu     latest              ea4c82dcd15a        2 weeks ago         85.8MB
+root@default:~# docker rmi ubuntu
+Untagged: ubuntu:latest
+Untagged: ubuntu@sha256:29934af957c53004d7fb6340139880d23fb1952505a15d69a03af0d1418878cb
+root@default:~# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+rajarani/ubuntu     latest              ea4c82dcd15a        2 weeks ago         85.8MB
+root@default:~# docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+root@default:~# docker run -tid --name=jenkins --net=awsnw  -p 4091:4081 rajarni/ubuntu /bin/bash
+Unable to find image 'rajarni/ubuntu:latest' locally
+docker: Error response from daemon: pull access denied for rajarni/ubuntu, repository does not exist or may require 'docker login'.
+See 'docker run --help'.
+root@default:~# docker run -tid --name=jenkins --net=awsnw  -p 4091:4081 rajarani/ubuntu /bin/bash
+7c857e862d0ca0c32acb491264f90737dba6d14a07499024576d2029332af3bd
+root@default:~# docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                    NAMES
+7c857e862d0c        rajarani/ubuntu     "/bin/bash"         11 seconds ago      Up 7 seconds        0.0.0.0:4091->4081/tcp   jenkins
+root@default:~# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+rajarani/ubuntu     latest              ea4c82dcd15a        2 weeks ago         85.8MB
+root@default:~# docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+a409e446efc9        awsnw               bridge              local
+99d170406ba6        bridge              bridge              local
+0f7f6f946770        host                host                local
+ec4afaedbf22        none                null                local
+root@default:~# docker commit 7c857e862d0c rajarani/ubuntu:jenkinsver01
+sha256:68186bedd788fcd5e70ec76855e9aa74e42b8986f9c6e2d815476b5955e75b48
+root@default:~# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+rajarani/ubuntu     jenkinsver01        68186bedd788        7 seconds ago       85.8MB
+rajarani/ubuntu     latest              ea4c82dcd15a        2 weeks ago         85.8MB
+root@default:~# docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED              STATUS              PORTS                    NAMES
+7c857e862d0c        rajarani/ubuntu     "/bin/bash"         About a minute ago   Up About a minute   0.0.0.0:4091->4081/tcp   jenkins
+root@default:~# docker commit 7c857e862d0c jenkins
+sha256:46575f0afec46ac24e0463fd4d9b40c9b2f5f9dc3014f499b366109eba564345
+root@default:~# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+jenkins             latest              46575f0afec4        3 seconds ago       85.8MB
+rajarani/ubuntu     jenkinsver01        68186bedd788        39 seconds ago      85.8MB
+rajarani/ubuntu     latest              ea4c82dcd15a        2 weeks ago         85.8MB
+root@default:~# docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+a409e446efc9        awsnw               bridge              local
+99d170406ba6        bridge              bridge              local
+0f7f6f946770        host                host                local
+ec4afaedbf22        none                null                local
+root@default:~# docker connect awsnw jenkins
+
+Usage:  docker [OPTIONS] COMMAND
+
+A self-sufficient runtime for containers
+
+Options:
+      --config string      Location of client config files (default "/root/.docker")
+  -D, --debug              Enable debug mode
+  -H, --host list          Daemon socket(s) to connect to
+  -l, --log-level string   Set the logging level ("debug"|"info"|"warn"|"error"|"fatal") (default "info")
+      --tls                Use TLS; implied by --tlsverify
+      --tlscacert string   Trust certs signed only by this CA (default "/root/.docker/ca.pem")
+      --tlscert string     Path to TLS certificate file (default "/root/.docker/cert.pem")
+      --tlskey string      Path to TLS key file (default "/root/.docker/key.pem")
+      --tlsverify          Use TLS and verify the remote
+  -v, --version            Print version information and quit
+
+Management Commands:
+  config      Manage Docker configs
+  container   Manage containers
+  image       Manage images
+  network     Manage networks
+  node        Manage Swarm nodes
+  plugin      Manage plugins
+  secret      Manage Docker secrets
+  service     Manage services
+  stack       Manage Docker stacks
+  swarm       Manage Swarm
+  system      Manage Docker
+  trust       Manage trust on Docker images
+  volume      Manage volumes
+
+Commands:
+  attach      Attach local standard input, output, and error streams to a running container
+  build       Build an image from a Dockerfile
+  commit      Create a new image from a container's changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  diff        Inspect changes to files or directories on a container's filesystem
+  events      Get real time events from the server
+  exec        Run a command in a running container
+  export      Export a container's filesystem as a tar archive
+  history     Show the history of an image
+  images      List images
+  import      Import the contents from a tarball to create a filesystem image
+  info        Display system-wide information
+  inspect     Return low-level information on Docker objects
+  kill        Kill one or more running containers
+  load        Load an image from a tar archive or STDIN
+  login       Log in to a Docker registry
+  logout      Log out from a Docker registry
+  logs        Fetch the logs of a container
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  ps          List containers
+  pull        Pull an image or a repository from a registry
+  push        Push an image or a repository to a registry
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  rmi         Remove one or more images
+  run         Run a command in a new container
+  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+  search      Search the Docker Hub for images
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  version     Show the Docker version information
+  wait        Block until one or more containers stop, then print their exit codes
+
+Run 'docker COMMAND --help' for more information on a command.
+root@default:~# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED              SIZE
+jenkins             latest              46575f0afec4        About a minute ago   85.8MB
+rajarani/ubuntu     jenkinsver01        68186bedd788        About a minute ago   85.8MB
+rajarani/ubuntu     latest              ea4c82dcd15a        2 weeks ago          85.8MB
+root@default:~# docker rmi jenkins
+Untagged: jenkins:latest
+Deleted: sha256:46575f0afec46ac24e0463fd4d9b40c9b2f5f9dc3014f499b366109eba564345
+root@default:~# docker connect awsnw jenkins
+
+Usage:  docker [OPTIONS] COMMAND
+
+A self-sufficient runtime for containers
+
+Options:
+      --config string      Location of client config files (default "/root/.docker")
+  -D, --debug              Enable debug mode
+  -H, --host list          Daemon socket(s) to connect to
+  -l, --log-level string   Set the logging level ("debug"|"info"|"warn"|"error"|"fatal") (default "info")
+      --tls                Use TLS; implied by --tlsverify
+      --tlscacert string   Trust certs signed only by this CA (default "/root/.docker/ca.pem")
+      --tlscert string     Path to TLS certificate file (default "/root/.docker/cert.pem")
+      --tlskey string      Path to TLS key file (default "/root/.docker/key.pem")
+      --tlsverify          Use TLS and verify the remote
+  -v, --version            Print version information and quit
+
+Management Commands:
+  config      Manage Docker configs
+  container   Manage containers
+  image       Manage images
+  network     Manage networks
+  node        Manage Swarm nodes
+  plugin      Manage plugins
+  secret      Manage Docker secrets
+  service     Manage services
+  stack       Manage Docker stacks
+  swarm       Manage Swarm
+  system      Manage Docker
+  trust       Manage trust on Docker images
+  volume      Manage volumes
+
+Commands:
+  attach      Attach local standard input, output, and error streams to a running container
+  build       Build an image from a Dockerfile
+  commit      Create a new image from a container's changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  diff        Inspect changes to files or directories on a container's filesystem
+  events      Get real time events from the server
+  exec        Run a command in a running container
+  export      Export a container's filesystem as a tar archive
+  history     Show the history of an image
+  images      List images
+  import      Import the contents from a tarball to create a filesystem image
+  info        Display system-wide information
+  inspect     Return low-level information on Docker objects
+  kill        Kill one or more running containers
+  load        Load an image from a tar archive or STDIN
+  login       Log in to a Docker registry
+  logout      Log out from a Docker registry
+  logs        Fetch the logs of a container
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  ps          List containers
+  pull        Pull an image or a repository from a registry
+  push        Push an image or a repository to a registry
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  rmi         Remove one or more images
+  run         Run a command in a new container
+  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+  search      Search the Docker Hub for images
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  version     Show the Docker version information
+  wait        Block until one or more containers stop, then print their exit codes
+
+Run 'docker COMMAND --help' for more information on a command.
+root@default:~# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+rajarani/ubuntu     jenkinsver01        68186bedd788        2 minutes ago       85.8MB
+rajarani/ubuntu     latest              ea4c82dcd15a        2 weeks ago         85.8MB
+root@default:~# docker network connect awsnw jenkins
+Error response from daemon: endpoint with name jenkins already exists in network awsnw
+root@default:~# docker network connect awsnw jenkinsver01
+Error response from daemon: No such container: jenkinsver01
+root@default:~# docker network disconnet awsnw jenkins
+
+Usage:  docker network COMMAND
+
+Manage networks
+
+Commands:
+  connect     Connect a container to a network
+  create      Create a network
+  disconnect  Disconnect a container from a network
+  inspect     Display detailed information on one or more networks
+  ls          List networks
+  prune       Remove all unused networks
+  rm          Remove one or more networks
+
+Run 'docker network COMMAND --help' for more information on a command.
+root@default:~# docker network disconnect awsnw jenkins
+root@default:~# docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+a409e446efc9        awsnw               bridge              local
+99d170406ba6        bridge              bridge              local
+0f7f6f946770        host                host                local
+ec4afaedbf22        none                null                local
+root@default:~# docker inspect awsnw
+[
+    {
+        "Name": "awsnw",
+        "Id": "a409e446efc90f9a5b32dbe32328895d1dd110d1e28a1f0c4b1f9533b31a3003",
+        "Created": "2018-11-08T08:12:33.330020551Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.21.0.0/24"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {},
+        "Options": {},
+        "Labels": {}
+    }
+]
+root@default:~# docker network connect awsnw jenkins
+root@default:~# docker inspect awsnw
+[
+    {
+        "Name": "awsnw",
+        "Id": "a409e446efc90f9a5b32dbe32328895d1dd110d1e28a1f0c4b1f9533b31a3003",
+        "Created": "2018-11-08T08:12:33.330020551Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.21.0.0/24"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "7c857e862d0ca0c32acb491264f90737dba6d14a07499024576d2029332af3bd": {
+                "Name": "jenkins",
+                "EndpointID": "e5e62a311dfc33f7f73d69d7e20b63ecbd1aac8a1e632c3cbd3d9617d9354a91",
+                "MacAddress": "02:42:ac:15:00:02",
+                "IPv4Address": "172.21.0.2/24",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {}
+    }
+]
+root@default:~#
